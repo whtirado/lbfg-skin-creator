@@ -1609,8 +1609,8 @@
         .addEventListener("click", () => {
           const [r, g, b] = state.colors[state.activeId];
           copyToClipboard(
-            `${r}, ${g}, ${b}`,
-            `${state.activeId} RGB (${r}, ${g}, ${b}) copied!`,
+            `${r} ${g} ${b}`,
+            `${state.activeId} RGB ${r} ${g} ${b} copied!`,
           );
         });
 
