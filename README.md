@@ -41,4 +41,4 @@ Export order is fixed, from Body through Claws:
 59 66 82 235 94 40 76 86 106 216 222 233 235 203 139 208 135 112 180 142 173 236 239 244 191 97 106 46 52 64
 ```
 
-Each value is an integer from 0 to 255. The example above is the Apex Predator preset (also the default palette).
+Each value is an integer from 1 to 255. Black is 1 1 1; 0 is not a valid channel. The example above is the Apex Predator preset (also the default palette).

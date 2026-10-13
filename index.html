@@ -552,7 +552,7 @@
                       <input
                         id="numR"
                         type="number"
-                        min="0"
+                        min="1"
                         max="255"
                         value="59"
                         class="w-14 bg-cyber-800 border border-white/10 rounded-lg px-2 py-0.5 text-right font-mono text-xs text-red-400 font-bold focus:outline-none focus:border-red-500"
@@ -563,11 +563,11 @@
                   <input
                     id="sliderR"
                     type="range"
-                    min="0"
+                    min="1"
                     max="255"
                     value="59"
                     class="w-full"
-                    style="background: linear-gradient(to right, #111, #ef4444)"
+                    style="background: linear-gradient(to right, #010101, #ef4444)"
                   />
                 </div>
 
@@ -590,7 +590,7 @@
                       <input
                         id="numG"
                         type="number"
-                        min="0"
+                        min="1"
                         max="255"
                         value="66"
                         class="w-14 bg-cyber-800 border border-white/10 rounded-lg px-2 py-0.5 text-right font-mono text-xs text-green-400 font-bold focus:outline-none focus:border-green-500"
@@ -601,11 +601,11 @@
                   <input
                     id="sliderG"
                     type="range"
-                    min="0"
+                    min="1"
                     max="255"
                     value="66"
                     class="w-full"
-                    style="background: linear-gradient(to right, #111, #22c55e)"
+                    style="background: linear-gradient(to right, #010101, #22c55e)"
                   />
                 </div>
 
@@ -626,7 +626,7 @@
                       <input
                         id="numB"
                         type="number"
-                        min="0"
+                        min="1"
                         max="255"
                         value="82"
                         class="w-14 bg-cyber-800 border border-white/10 rounded-lg px-2 py-0.5 text-right font-mono text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500"
@@ -637,11 +637,11 @@
                   <input
                     id="sliderB"
                     type="range"
-                    min="0"
+                    min="1"
                     max="255"
                     value="82"
                     class="w-full"
-                    style="background: linear-gradient(to right, #111, #3b82f6)"
+                    style="background: linear-gradient(to right, #010101, #3b82f6)"
                   />
                 </div>
               </div>
@@ -1034,11 +1034,11 @@
         },
         bioluminescent: {
           Body: [10, 20, 35],
-          Markings: [0, 255, 214],
+          Markings: [1, 255, 214],
           Flank: [18, 38, 58],
           Underbelly: [5, 12, 22],
           Detail1: [74, 222, 128],
-          Eyes: [0, 240, 255],
+          Eyes: [1, 240, 255],
           MaleDisplay: [192, 132, 252],
           Teeth: [200, 240, 255],
           Mouth: [30, 20, 50],
@@ -1106,7 +1106,7 @@
         },
       };
 
-      // Quick selection swatches
+      // Quick selection swatches. Black is 1, 1, 1.
       const QUICK_PALETTE = [
         [239, 68, 68],
         [249, 115, 22],
@@ -1120,6 +1120,7 @@
         [148, 163, 184],
         [30, 41, 59],
         [15, 23, 42],
+        [1, 1, 1],
       ];
 
       // Master Application State
@@ -1134,9 +1135,16 @@
         state.colors[c.id] = [...c.default];
       });
 
-      // RGB Utilities
-      function clamp(val, min = 0, max = 255) {
-        return Math.max(min, Math.min(max, Math.round(val)));
+      // RGB Utilities. 0 is illegal; black is 1, 1, 1.
+      const RGB_MIN = 1;
+      const RGB_MAX = 255;
+
+      function clamp(val, min = RGB_MIN, max = RGB_MAX) {
+        const floor = Math.max(RGB_MIN, min);
+        const ceil = Math.min(RGB_MAX, max);
+        const n = Math.round(Number(val));
+        if (!Number.isFinite(n)) return floor;
+        return Math.max(floor, Math.min(ceil, n));
       }
 
       function toRgbString(r, g, b) {
@@ -1207,9 +1215,9 @@
         }
 
         return [
-          Math.round((r + m) * 255),
-          Math.round((g + m) * 255),
-          Math.round((b + m) * 255),
+          clamp((r + m) * 255),
+          clamp((g + m) * 255),
+          clamp((b + m) * 255),
         ];
       }
 
@@ -1265,8 +1273,8 @@
 
       // Core function: Set color for a channel and sync entire app strictly with RGB
       function setColor(channelId, rgb) {
-        state.colors[channelId] = [...rgb];
-        const [r, g, b] = rgb;
+        const [r, g, b] = rgb.map((n) => clamp(n));
+        state.colors[channelId] = [r, g, b];
         const rgbCss = toRgbString(r, g, b);
 
         // If updating active channel, refresh inspector inputs & metric displays
@@ -1449,14 +1457,14 @@
 
       // Precision RGB Channel Sliders & Inputs
       function onRgbInputChange(source) {
-        let r = parseInt(document.getElementById("numR").value) || 0;
-        let g = parseInt(document.getElementById("numG").value) || 0;
-        let b = parseInt(document.getElementById("numB").value) || 0;
+        let r = parseInt(document.getElementById("numR").value, 10);
+        let g = parseInt(document.getElementById("numG").value, 10);
+        let b = parseInt(document.getElementById("numB").value, 10);
 
         if (source === "slider") {
-          r = parseInt(document.getElementById("sliderR").value);
-          g = parseInt(document.getElementById("sliderG").value);
-          b = parseInt(document.getElementById("sliderB").value);
+          r = parseInt(document.getElementById("sliderR").value, 10);
+          g = parseInt(document.getElementById("sliderG").value, 10);
+          b = parseInt(document.getElementById("sliderB").value, 10);
         }
 
         r = clamp(r);
@@ -1484,7 +1492,7 @@
         const val = e.target.value.trim().replace(/^rgb\(|\)$/gi, "");
         const parts = val.split(/[,\s]+/).map((p) => parseInt(p, 10));
         if (parts.length >= 3 && parts.slice(0, 3).every((n) => !isNaN(n))) {
-          const [r, g, b] = parts.slice(0, 3).map(clamp);
+          const [r, g, b] = parts.slice(0, 3).map((n) => clamp(n));
           setColor(state.activeId, [r, g, b]);
         }
       });
