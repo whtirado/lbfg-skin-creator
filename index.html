@@ -531,27 +531,6 @@
                     style="left: 105px; top: 105px; background: #3b4252"
                   ></div>
                 </div>
-
-                <!-- Luminance / Brightness Track -->
-                <div class="w-full max-w-[210px] flex flex-col gap-1.5">
-                  <div
-                    class="flex justify-between text-[11px] font-mono text-slate-400"
-                  >
-                    <span>Luminance / Brightness</span>
-                    <span id="labelValue" class="text-slate-200 font-bold"
-                      >100%</span
-                    >
-                  </div>
-                  <input
-                    id="sliderValue"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="100"
-                    class="w-full h-2 rounded-full cursor-pointer shadow-inner"
-                    style="background: linear-gradient(to right, #000, #fff)"
-                  />
-                </div>
               </div>
 
               <!-- Precision RGB Sliders Column (MD: 7 Cols) -->
@@ -1211,7 +1190,7 @@
       const wheelSize = wheelCanvas.width;
       const wheelRadius = wheelSize / 2;
 
-      function renderWheel(brightnessMultiplier = 1.0) {
+      function renderWheel() {
         const imgData = wheelCtx.createImageData(wheelSize, wheelSize);
         const data = imgData.data;
 
@@ -1227,7 +1206,7 @@
               let angle = Math.atan2(dy, dx) * (180 / Math.PI);
               if (angle < 0) angle += 360;
               const sat = dist / wheelRadius;
-              const [r, g, b] = hsvToRgb(angle, sat, brightnessMultiplier);
+              const [r, g, b] = hsvToRgb(angle, sat, 1);
 
               data[idx] = r;
               data[idx + 1] = g;
@@ -1253,14 +1232,10 @@
         pin.style.left = `${px}px`;
         pin.style.top = `${py}px`;
         pin.style.backgroundColor = toRgbString(r, g, b);
-
-        const valPercent = Math.round(hsv.v * 100);
-        document.getElementById("sliderValue").value = valPercent;
-        document.getElementById("labelValue").textContent = `${valPercent}%`;
       }
 
       // Core function: Set color for a channel and sync entire app strictly with RGB
-      function setColor(channelId, rgb, updateWheelGraphic = false) {
+      function setColor(channelId, rgb) {
         state.colors[channelId] = [...rgb];
         const [r, g, b] = rgb;
         const rgbCss = toRgbString(r, g, b);
@@ -1289,11 +1264,6 @@
           }
 
           updateWheelPinPosition(r, g, b);
-
-          if (updateWheelGraphic) {
-            const hsv = rgbToHsv(r, g, b);
-            renderWheel(hsv.v);
-          }
         }
 
         // Update Card in channels overview grid
@@ -1326,9 +1296,7 @@
         if (activeCard) activeCard.classList.add("active-card");
 
         const [r, g, b] = state.colors[channelId];
-        const hsv = rgbToHsv(r, g, b);
-        renderWheel(hsv.v);
-        setColor(channelId, [r, g, b], false);
+        setColor(channelId, [r, g, b]);
       }
 
       // Render the 10 channel overview cards with pure RGB indicators
@@ -1407,11 +1375,8 @@
         if (angle < 0) angle += 360;
 
         const sat = Math.min(1, dist / wheelRadius);
-        const val =
-          parseFloat(document.getElementById("sliderValue").value) / 100;
-
-        const newRgb = hsvToRgb(angle, sat, val);
-        setColor(state.activeId, newRgb, false);
+        const newRgb = hsvToRgb(angle, sat, 1);
+        setColor(state.activeId, newRgb);
       }
 
       wheelCanvas.addEventListener("mousedown", (e) => {
@@ -1453,20 +1418,6 @@
         state.isDraggingWheel = false;
       });
 
-      // Value / Brightness Slider
-      const sliderValue = document.getElementById("sliderValue");
-      sliderValue.addEventListener("input", (e) => {
-        const val = parseFloat(e.target.value) / 100;
-        document.getElementById("labelValue").textContent =
-          `${e.target.value}%`;
-        renderWheel(val);
-
-        const [r, g, b] = state.colors[state.activeId];
-        const hsv = rgbToHsv(r, g, b);
-        const newRgb = hsvToRgb(hsv.h, hsv.s, val);
-        setColor(state.activeId, newRgb, false);
-      });
-
       // Precision RGB Channel Sliders & Inputs
       function onRgbInputChange(source) {
         let r = parseInt(document.getElementById("numR").value) || 0;
@@ -1483,7 +1434,7 @@
         g = clamp(g);
         b = clamp(b);
 
-        setColor(state.activeId, [r, g, b], true);
+        setColor(state.activeId, [r, g, b]);
       }
 
       ["sliderR", "sliderG", "sliderB"].forEach((id) => {
@@ -1505,7 +1456,7 @@
         const parts = val.split(/[,\s]+/).map((p) => parseInt(p, 10));
         if (parts.length >= 3 && parts.slice(0, 3).every((n) => !isNaN(n))) {
           const [r, g, b] = parts.slice(0, 3).map(clamp);
-          setColor(state.activeId, [r, g, b], true);
+          setColor(state.activeId, [r, g, b]);
         }
       });
 
@@ -1519,7 +1470,7 @@
         btn.style.backgroundColor = rgbCss;
         btn.title = rgbCss;
         btn.addEventListener("click", () => {
-          setColor(state.activeId, rgb, true);
+          setColor(state.activeId, rgb);
         });
         quickSwatchesContainer.appendChild(btn);
       });
@@ -1552,7 +1503,7 @@
         .addEventListener("click", () => {
           const currentChannel = CHANNELS.find((c) => c.id === state.activeId);
           if (currentChannel) {
-            setColor(currentChannel.id, [...currentChannel.default], true);
+            setColor(currentChannel.id, [...currentChannel.default]);
             showToast(`Reset ${currentChannel.label} to default`);
           }
         });
@@ -1566,7 +1517,7 @@
           if (preset) {
             Object.keys(preset).forEach((channelId) => {
               if (state.colors[channelId]) {
-                setColor(channelId, [...preset[channelId]], false);
+                setColor(channelId, [...preset[channelId]]);
               }
             });
             setActiveChannel(state.activeId);
@@ -1583,7 +1534,7 @@
           const hue = (baseHue + idx * 36) % 360;
           const sat = 0.4 + Math.random() * 0.6;
           const val = 0.3 + Math.random() * 0.7;
-          setColor(channel.id, hsvToRgb(hue, sat, val), false);
+          setColor(channel.id, hsvToRgb(hue, sat, val));
         });
         setActiveChannel(state.activeId);
         showToast("Generated harmonious palette!");
@@ -1680,7 +1631,7 @@
 
       // Initialize application on window load
       window.addEventListener("load", () => {
-        renderWheel(1.0);
+        renderWheel();
         renderChannelCards();
         setActiveChannel("Body");
       });
