@@ -1,4 +1,4 @@
-# Creature Color Studio
+# Life Breaks Free Gaming Skin Creator
 
 A single-page RGB calibration tool for creature skins. Paint ten anatomical channels, then export them as one space-delimited stream of 30 integers.
 

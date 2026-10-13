@@ -1,861 +1,1349 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Creature Color Studio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Life Breaks Free Gaming Skin Creator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', "sans-serif"],
+              mono: ['"JetBrains Mono"', "monospace"],
+            },
+            colors: {
+              cyber: {
+                950: "#06080F",
+                900: "#0B0F19",
+                850: "#111726",
+                800: "#172033",
+                700: "#23304B",
+                600: "#32456B",
+              },
+            },
           },
-          colors: {
-            cyber: {
-              950: '#06080F',
-              900: '#0B0F19',
-              850: '#111726',
-              800: '#172033',
-              700: '#23304B',
-              600: '#32456B',
-            }
-          }
-        }
+        },
+      };
+    </script>
+
+    <style>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
       }
-    }
-  </script>
+      ::-webkit-scrollbar-track {
+        background: #0b0f19;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #23304b;
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #38bdf8;
+      }
 
-  <style>
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 7px;
-      height: 7px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0b0f19;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #23304b;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #38bdf8;
-    }
+      /* Range slider tracks and thumbs */
+      input[type="range"] {
+        -webkit-appearance: none;
+        background: transparent;
+        height: 6px;
+        border-radius: 9999px;
+        outline: none;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ffffff;
+        cursor: pointer;
+        border: 2px solid #0f172a;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+        transition: transform 0.1s ease;
+      }
+      input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.15);
+      }
 
-    /* Range slider tracks and thumbs */
-    input[type=range] {
-      -webkit-appearance: none;
-      background: transparent;
-      height: 6px;
-      border-radius: 9999px;
-      outline: none;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #ffffff;
-      cursor: pointer;
-      border: 2px solid #0f172a;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
-      transition: transform 0.1s ease;
-    }
-    input[type=range]::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
-    }
+      /* Glassmorphism utility classes */
+      .glass-panel {
+        background: rgba(17, 23, 38, 0.78);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+      .glass-card {
+        background: rgba(17, 23, 38, 0.65);
+        backdrop-filter: blur(8px);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .glass-card:hover {
+        background: rgba(23, 32, 51, 0.85);
+        border-color: rgba(56, 189, 248, 0.4);
+        transform: translateY(-2px);
+      }
+      .active-card {
+        background: rgba(23, 32, 51, 0.95) !important;
+        border-color: #38bdf8 !important;
+        box-shadow: 0 0 20px -3px rgba(56, 189, 248, 0.35);
+      }
+    </style>
+  </head>
 
-    /* Glassmorphism utility classes */
-    .glass-panel {
-      background: rgba(17, 23, 38, 0.78);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-    .glass-card {
-      background: rgba(17, 23, 38, 0.65);
-      backdrop-filter: blur(8px);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .glass-card:hover {
-      background: rgba(23, 32, 51, 0.85);
-      border-color: rgba(56, 189, 248, 0.4);
-      transform: translateY(-2px);
-    }
-    .active-card {
-      background: rgba(23, 32, 51, 0.95) !important;
-      border-color: #38bdf8 !important;
-      box-shadow: 0 0 20px -3px rgba(56, 189, 248, 0.35);
-    }
-  </style>
-</head>
-
-<body class="bg-cyber-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
-  
-  <!-- Studio Header -->
-  <header class="border-b border-white/5 glass-panel sticky top-0 z-40 px-4 sm:px-8 py-3 shadow-xl w-full">
-    <div class="max-w-[1500px] mx-auto w-full flex flex-wrap items-center justify-between gap-3">
-      
-      <!-- Brand & Title -->
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-500 p-0.5 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-          <div class="w-full h-full bg-cyber-950 rounded-[10px] flex items-center justify-center">
-            <svg class="w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 2a7 7 0 0 0 7 7c0 2-1 3-3 4-1 1-1 2-1 3v2"/>
-              <circle cx="12" cy="19" r="1"/>
-            </svg>
+  <body
+    class="bg-cyber-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200"
+  >
+    <!-- Studio Header -->
+    <header
+      class="border-b border-white/5 glass-panel sticky top-0 z-40 px-4 sm:px-8 py-3 shadow-xl w-full"
+    >
+      <div
+        class="max-w-[1500px] mx-auto w-full flex flex-wrap items-center justify-between gap-3"
+      >
+        <!-- Brand & Title -->
+        <div class="flex items-center gap-3">
+          <div
+            class="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden"
+          >
+            <img
+              src="icon.webp"
+              alt="Life Breaks Free Gaming"
+              class="w-full h-full object-cover"
+            />
           </div>
-        </div>
-        <div>
-          <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white flex items-center gap-2">
-            Creature Color Studio
-            <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 uppercase tracking-widest font-semibold">RGB Engine</span>
-          </h1>
-          <p class="text-[11px] text-slate-400 hidden sm:block">10-Channel Anatomical RGB Calibration System</p>
-        </div>
-      </div>
-
-      <!-- Action Bar: Presets & Controls -->
-      <div class="flex items-center flex-wrap gap-2">
-        
-        <!-- Preset Dropdown -->
-        <div class="flex items-center gap-1.5 bg-cyber-900 border border-white/10 rounded-xl px-2.5 py-1.5 shadow-inner">
-          <span class="text-xs text-slate-400 font-mono hidden sm:inline">Theme:</span>
-          <select id="presetSelect" class="bg-transparent text-xs font-mono font-semibold text-cyan-300 focus:outline-none cursor-pointer max-w-[190px] sm:max-w-none">
-            <option value="forest_apex" class="bg-cyber-900 text-slate-200">Forest Apex</option>
-            <option value="swamp_titan" class="bg-cyber-900 text-slate-200">Swamp Titan</option>
-            <option value="pack_alpha" class="bg-cyber-900 text-slate-200">Pack Alpha</option>
-            <option value="crimson_bull" class="bg-cyber-900 text-slate-200">Crimson Bull</option>
-            <option value="glacial_plumage" class="bg-cyber-900 text-slate-200">Glacial Plumage</option>
-            <option value="scythe_blossom" class="bg-cyber-900 text-slate-200">Scythe Blossom</option>
-            <option value="iron_bastion" class="bg-cyber-900 text-slate-200">Iron Bastion</option>
-            <option value="mangrove_fisher" class="bg-cyber-900 text-slate-200">Mangrove Fisher</option>
-            <option value="sunfire_plates" class="bg-cyber-900 text-slate-200">Sunfire Plates</option>
-            <option value="savanna_ravager" class="bg-cyber-900 text-slate-200">Savanna Ravager</option>
-            <option value="apex" class="bg-cyber-900 text-slate-200">Apex Predator</option>
-            <option value="bioluminescent" class="bg-cyber-900 text-slate-200">Deep Bioluminescent</option>
-            <option value="magma" class="bg-cyber-900 text-slate-200">Magma Drake</option>
-            <option value="toxic" class="bg-cyber-900 text-slate-200">Toxic Wyrm</option>
-            <option value="spectral" class="bg-cyber-900 text-slate-200">Spectral Albino</option>
-            <option value="cyber" class="bg-cyber-900 text-slate-200">Cyber Hunter</option>
-            <option value="sandwyrm" class="bg-cyber-900 text-slate-200">Dune Strider</option>
-          </select>
-        </div>
-
-        <!-- Randomize All Button -->
-        <button id="btnRandomAll" class="px-3 py-1.5 rounded-xl bg-cyber-850 hover:bg-cyber-800 border border-white/10 text-xs font-semibold text-slate-200 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm" title="Generate harmonious random palette">
-          <svg class="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-          <span class="hidden sm:inline">Randomize</span>
-        </button>
-
-        <!-- Export Palette Modal Trigger -->
-        <button id="btnOpenExport" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-semibold shadow-lg shadow-cyan-900/40 transition-all flex items-center gap-1.5 active:scale-95">
-          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-          <span>Export RGB</span>
-        </button>
-
-      </div>
-    </div>
-  </header>
-
-  <main class="w-full max-w-[1500px] mx-auto px-4 sm:px-8 py-5 flex-1 flex flex-col gap-5">
-
-    <!-- Top Row: Active Channel Focus Panel & Master RGB Color Wheel Calibration -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-
-      <!-- LEFT: Active Channel Showcase & Vector Readout (4 Cols on wide screen) -->
-      <div class="lg:col-span-4 xl:col-span-4 flex flex-col">
-        <div class="glass-panel rounded-2xl p-4 sm:p-5 border border-white/10 shadow-2xl flex-1 flex flex-col justify-between relative overflow-hidden">
-          
-          <!-- Channel Card Header with Navigation Stepper -->
           <div>
-            <div class="flex items-center justify-between pb-3 border-b border-white/10">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Selected Channel</span>
-              </div>
-              
-              <!-- Quick Channel Stepper -->
-              <div class="flex items-center gap-1.5 bg-cyber-900 border border-white/10 rounded-xl p-1 shadow-inner">
-                <button id="btnPrevChannel" title="Previous Channel" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-cyber-800 transition-colors">
-                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <span id="activeSlotTag" class="text-[11px] font-mono px-2 text-cyan-300 font-semibold select-none">Slot 1/10</span>
-                <button id="btnNextChannel" title="Next Channel" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-cyber-800 transition-colors">
-                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+            <h1
+              class="text-base sm:text-lg font-extrabold tracking-tight text-white flex flex-wrap items-center gap-2"
+            >
+              Life Breaks Free Gaming Skin Creator
+              <span
+                class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 uppercase tracking-widest font-semibold"
+                >RGB Engine</span
+              >
+            </h1>
+            <p class="text-[11px] text-slate-400 hidden sm:block">
+              10-Channel Anatomical RGB Calibration System
+            </p>
+          </div>
+        </div>
 
-            <!-- Large Hero Swatch & Title Area -->
-            <div class="my-4 flex flex-col items-center text-center">
-              <div class="relative group my-1">
-                <div id="activeSwatchLarge" class="w-32 h-32 sm:w-36 sm:h-36 rounded-3xl shadow-2xl border-4 border-white/20 transition-all duration-300 transform group-hover:scale-105 flex items-end justify-end p-2.5" style="background-color: rgb(59, 66, 82);">
-                  <span id="luminanceBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-black/70 text-white backdrop-blur-sm border border-white/10 font-medium">Dark Tone</span>
-                </div>
-              </div>
-
-              <h2 id="activeTitle" class="text-2xl font-black text-white tracking-wide mt-1">Body</h2>
-              <p id="activeDesc" class="text-xs text-slate-400 mt-0.5 font-normal">Primary anatomical pigmentation layer</p>
-            </div>
-
-            <!-- Live RGB Values Metric Grid -->
-            <div class="grid grid-cols-3 gap-2 text-xs font-mono my-2">
-              <div class="bg-cyber-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col gap-0.5">
-                <span class="text-[10px] text-red-400 font-bold uppercase tracking-wider">Red (R)</span>
-                <span id="metricR" class="font-bold text-red-300 text-sm">59</span>
-              </div>
-              <div class="bg-cyber-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col gap-0.5">
-                <span class="text-[10px] text-green-400 font-bold uppercase tracking-wider">Green (G)</span>
-                <span id="metricG" class="font-bold text-green-300 text-sm">66</span>
-              </div>
-              <div class="bg-cyber-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col gap-0.5">
-                <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">Blue (B)</span>
-                <span id="metricB" class="font-bold text-blue-300 text-sm">82</span>
-              </div>
-              <div class="bg-cyber-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col gap-0.5 col-span-3">
-                <span class="text-[10px] text-slate-500 uppercase tracking-wider">Combined RGB Coordinates</span>
-                <span id="activeRgbDisplay" class="font-bold text-cyan-300 text-sm tracking-wide">rgb(59, 66, 82)</span>
-              </div>
-            </div>
+        <!-- Action Bar: Presets & Controls -->
+        <div class="flex items-center flex-wrap gap-2">
+          <!-- Preset Dropdown -->
+          <div
+            class="flex items-center gap-1.5 bg-cyber-900 border border-white/10 rounded-xl px-2.5 py-1.5 shadow-inner"
+          >
+            <span class="text-xs text-slate-400 font-mono hidden sm:inline"
+              >Theme:</span
+            >
+            <select
+              id="presetSelect"
+              class="bg-transparent text-xs font-mono font-semibold text-cyan-300 focus:outline-none cursor-pointer max-w-[190px] sm:max-w-none"
+            >
+              <option value="forest_apex" class="bg-cyber-900 text-slate-200">
+                Forest Apex
+              </option>
+              <option value="swamp_titan" class="bg-cyber-900 text-slate-200">
+                Swamp Titan
+              </option>
+              <option value="pack_alpha" class="bg-cyber-900 text-slate-200">
+                Pack Alpha
+              </option>
+              <option value="crimson_bull" class="bg-cyber-900 text-slate-200">
+                Crimson Bull
+              </option>
+              <option
+                value="glacial_plumage"
+                class="bg-cyber-900 text-slate-200"
+              >
+                Glacial Plumage
+              </option>
+              <option
+                value="scythe_blossom"
+                class="bg-cyber-900 text-slate-200"
+              >
+                Scythe Blossom
+              </option>
+              <option value="iron_bastion" class="bg-cyber-900 text-slate-200">
+                Iron Bastion
+              </option>
+              <option
+                value="mangrove_fisher"
+                class="bg-cyber-900 text-slate-200"
+              >
+                Mangrove Fisher
+              </option>
+              <option
+                value="sunfire_plates"
+                class="bg-cyber-900 text-slate-200"
+              >
+                Sunfire Plates
+              </option>
+              <option
+                value="savanna_ravager"
+                class="bg-cyber-900 text-slate-200"
+              >
+                Savanna Ravager
+              </option>
+              <option value="apex" class="bg-cyber-900 text-slate-200">
+                Apex Predator
+              </option>
+              <option
+                value="bioluminescent"
+                class="bg-cyber-900 text-slate-200"
+              >
+                Deep Bioluminescent
+              </option>
+              <option value="magma" class="bg-cyber-900 text-slate-200">
+                Magma Drake
+              </option>
+              <option value="toxic" class="bg-cyber-900 text-slate-200">
+                Toxic Wyrm
+              </option>
+              <option value="spectral" class="bg-cyber-900 text-slate-200">
+                Spectral Albino
+              </option>
+              <option value="cyber" class="bg-cyber-900 text-slate-200">
+                Cyber Hunter
+              </option>
+              <option value="sandwyrm" class="bg-cyber-900 text-slate-200">
+                Dune Strider
+              </option>
+            </select>
           </div>
 
-          <!-- Quick Action Buttons for Active Channel -->
-          <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2 mt-2">
-            <button id="btnResetChannel" class="px-3 py-1.5 rounded-xl bg-cyber-900 border border-white/10 text-xs font-semibold text-slate-400 hover:text-white hover:bg-cyber-850 transition-colors flex items-center gap-1.5 shadow-sm">
-              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              Default
-            </button>
-            <button id="btnCopyCurrentRgb" class="px-3.5 py-1.5 rounded-xl bg-cyan-600/30 border border-cyan-500/40 text-cyan-200 hover:bg-cyan-600/50 hover:text-white transition-all text-xs font-mono font-semibold flex items-center gap-1.5 shadow-sm">
-              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2" />
-              </svg>
-              Copy RGB
-            </button>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- RIGHT: Interactive Color Wheel & Precision Calibration Studio (8 Cols on wide screen) -->
-      <div class="lg:col-span-8 xl:col-span-8 flex flex-col">
-        <div class="glass-panel rounded-2xl p-4 sm:p-5 border border-white/10 shadow-2xl flex-1 flex flex-col justify-between relative">
-          
-          <!-- Inspector Header -->
-          <div class="flex items-center justify-between pb-3 border-b border-white/10 gap-3">
-            <div>
-              <h3 class="text-base font-bold text-white tracking-wide">RGB Color Wheel & Precision Calibration</h3>
-              <p class="text-xs text-slate-400">Interactive polar hue & saturation wheel with individual channel fine calibration</p>
-            </div>
-
-            <!-- Direct RGB Input Box -->
-            <div class="bg-cyber-900 border border-white/10 rounded-xl px-2.5 py-1.5 flex items-center gap-1.5 shadow-inner">
-              <span class="text-[11px] text-slate-400 font-mono font-medium">RGB</span>
-              <input id="inputRgbDirect" type="text" value="59, 66, 82" placeholder="r, g, b" class="w-32 bg-transparent text-xs font-mono font-bold text-cyan-300 focus:outline-none text-center" />
-            </div>
-          </div>
-
-          <!-- Color Wheel & Sliders Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center py-4 my-auto">
-            
-            <!-- Polar Color Wheel Canvas Column (MD: 5-6 Cols) -->
-            <div class="md:col-span-5 flex flex-col items-center justify-center gap-3 select-none">
-              <div class="relative w-[210px] h-[210px] flex items-center justify-center">
-                <!-- Color Wheel Canvas -->
-                <canvas id="wheelCanvas" width="210" height="210" class="rounded-full shadow-2xl cursor-crosshair border-2 border-white/10"></canvas>
-                
-                <!-- Wheel Marker Pin -->
-                <div id="wheelPin" class="absolute w-5 h-5 -ml-2.5 -mt-2.5 rounded-full border-2 border-white pointer-events-none shadow-lg transition-transform duration-75" style="left: 105px; top: 105px; background: #3B4252;"></div>
-              </div>
-
-              <!-- Luminance / Brightness Track -->
-              <div class="w-full max-w-[210px] flex flex-col gap-1.5">
-                <div class="flex justify-between text-[11px] font-mono text-slate-400">
-                  <span>Luminance / Brightness</span>
-                  <span id="labelValue" class="text-slate-200 font-bold">100%</span>
-                </div>
-                <input id="sliderValue" type="range" min="0" max="100" value="100" class="w-full h-2 rounded-full cursor-pointer shadow-inner" style="background: linear-gradient(to right, #000, #fff);" />
-              </div>
-            </div>
-
-            <!-- Precision RGB Sliders Column (MD: 7 Cols) -->
-            <div class="md:col-span-7 flex flex-col gap-3">
-              
-              <!-- Red Slider -->
-              <div class="bg-cyber-900/80 p-3 rounded-xl border border-white/5 flex flex-col gap-1.5 shadow-sm">
-                <div class="flex items-center justify-between text-xs font-mono">
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm shadow-red-500/50"></span>
-                    <span class="font-bold text-slate-200">Red Channel</span>
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <input id="numR" type="number" min="0" max="255" value="59" class="w-14 bg-cyber-800 border border-white/10 rounded-lg px-2 py-0.5 text-right font-mono text-xs text-red-400 font-bold focus:outline-none focus:border-red-500" />
-                    <span class="text-[10px] text-slate-500">/ 255</span>
-                  </div>
-                </div>
-                <input id="sliderR" type="range" min="0" max="255" value="59" class="w-full" style="background: linear-gradient(to right, #111, #ef4444);" />
-              </div>
-
-              <!-- Green Slider -->
-              <div class="bg-cyber-900/80 p-3 rounded-xl border border-white/5 flex flex-col gap-1.5 shadow-sm">
-                <div class="flex items-center justify-between text-xs font-mono">
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-sm shadow-green-500/50"></span>
-                    <span class="font-bold text-slate-200">Green Channel</span>
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <input id="numG" type="number" min="0" max="255" value="66" class="w-14 bg-cyber-800 border border-white/10 rounded-lg px-2 py-0.5 text-right font-mono text-xs text-green-400 font-bold focus:outline-none focus:border-green-500" />
-                    <span class="text-[10px] text-slate-500">/ 255</span>
-                  </div>
-                </div>
-                <input id="sliderG" type="range" min="0" max="255" value="66" class="w-full" style="background: linear-gradient(to right, #111, #22c55e);" />
-              </div>
-
-              <!-- Blue Slider -->
-              <div class="bg-cyber-900/80 p-3 rounded-xl border border-white/5 flex flex-col gap-1.5 shadow-sm">
-                <div class="flex items-center justify-between text-xs font-mono">
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50"></span>
-                    <span class="font-bold text-slate-200">Blue Channel</span>
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <input id="numB" type="number" min="0" max="255" value="82" class="w-14 bg-cyber-800 border border-white/10 rounded-lg px-2 py-0.5 text-right font-mono text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500" />
-                    <span class="text-[10px] text-slate-500">/ 255</span>
-                  </div>
-                </div>
-                <input id="sliderB" type="range" min="0" max="255" value="82" class="w-full" style="background: linear-gradient(to right, #111, #3b82f6);" />
-              </div>
-
-            </div>
-
-          </div>
-
-          <!-- Quick Palette Row -->
-          <div class="pt-3 border-t border-white/10 flex items-center justify-between flex-wrap gap-2">
-            <span class="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Quick Swatches:</span>
-            <div id="quickSwatches" class="flex items-center gap-2 flex-wrap">
-              <!-- Dynamically populated color dots -->
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Bottom Grid: All 10 Individual RGB Color Sections -->
-    <div class="flex flex-col gap-3 pb-4">
-      <div class="flex items-center justify-between flex-wrap gap-2">
-        <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
-          <h2 class="text-sm sm:text-base font-bold text-white tracking-wide">All 10 Color Sections Overview</h2>
-        </div>
-        <p class="text-xs text-slate-400">Select any channel card to calibrate via RGB color wheel</p>
-      </div>
-
-      <!-- 10 Channel Cards Grid: Balanced 5-col on desktop -->
-      <div id="channelsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
-      <!-- Rendered by JavaScript -->
-      </div>
-    </div>
-
-  </main>
-
-  <!-- Export Modal Overlay -->
-  <div id="exportModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-xl rounded-2xl border border-white/15 p-6 shadow-2xl flex flex-col gap-4">
-      
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
-        <div>
-          <h3 class="text-lg font-bold text-white">Export Flat RGB Stream</h3>
-          <p class="text-xs text-slate-400">Space-delimited RGB triplet stream for all 10 anatomical channels (30 integers)</p>
-        </div>
-        <button id="btnCloseExport" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-cyber-800 transition-colors">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Format Information & Stream Badge -->
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
-        <p class="text-[11px] text-slate-300 font-mono">Format: <span class="text-cyan-300">R G B R G B ... (Body → Claws)</span></p>
-        <div class="flex items-center gap-2">
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-cyber-900 text-slate-300 border border-white/10">30 values</span>
-          <span id="exportLengthBadge" class="text-[11px] font-mono px-2 py-0.5 rounded-lg bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 font-semibold">0 chars</span>
-        </div>
-      </div>
-
-      <!-- Export Textarea -->
-      <textarea id="exportTextarea" readonly class="w-full h-32 bg-cyber-950 border border-white/10 rounded-xl p-3.5 font-mono text-sm leading-relaxed text-cyan-300 focus:outline-none resize-none shadow-inner select-all"></textarea>
-
-      <!-- Modal Footer -->
-      <div class="flex items-center justify-between pt-2">
-        <span class="text-xs text-slate-400 font-mono">Ready for Console / Command Input</span>
-        <div class="flex items-center gap-2">
-          <button id="btnCopyExport" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs shadow-lg shadow-cyan-900/30 flex items-center gap-2 transition-all active:scale-95">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2" />
+          <!-- Randomize All Button -->
+          <button
+            id="btnRandomAll"
+            class="px-3 py-1.5 rounded-xl bg-cyber-850 hover:bg-cyber-800 border border-white/10 text-xs font-semibold text-slate-200 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm"
+            title="Generate harmonious random palette"
+          >
+            <svg
+              class="w-3.5 h-3.5 text-purple-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
             </svg>
-            Copy Flat Stream
+            <span class="hidden sm:inline">Randomize</span>
+          </button>
+
+          <!-- Export Palette Modal Trigger -->
+          <button
+            id="btnOpenExport"
+            class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-semibold shadow-lg shadow-cyan-900/40 transition-all flex items-center gap-1.5 active:scale-95"
+          >
+            <svg
+              class="w-3.5 h-3.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
+            </svg>
+            <span>Export RGB</span>
           </button>
         </div>
       </div>
+    </header>
 
+    <main
+      class="w-full max-w-[1500px] mx-auto px-4 sm:px-8 py-5 flex-1 flex flex-col gap-5"
+    >
+      <!-- Top Row: Active Channel Focus Panel & Master RGB Color Wheel Calibration -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+        <!-- LEFT: Active Channel Showcase & Vector Readout (4 Cols on wide screen) -->
+        <div class="lg:col-span-4 xl:col-span-4 flex flex-col">
+          <div
+            class="glass-panel rounded-2xl p-4 sm:p-5 border border-white/10 shadow-2xl flex-1 flex flex-col justify-between relative overflow-hidden"
+          >
+            <!-- Channel Card Header with Navigation Stepper -->
+            <div>
+              <div
+                class="flex items-center justify-between pb-3 border-b border-white/10"
+              >
+                <div class="flex items-center gap-2">
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"
+                  ></span>
+                  <span
+                    class="text-xs font-bold uppercase tracking-wider text-slate-300"
+                    >Selected Channel</span
+                  >
+                </div>
+
+                <!-- Quick Channel Stepper -->
+                <div
+                  class="flex items-center gap-1.5 bg-cyber-900 border border-white/10 rounded-xl p-1 shadow-inner"
+                >
+                  <button
+                    id="btnPrevChannel"
+                    title="Previous Channel"
+                    class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-cyber-800 transition-colors"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </button>
+                  <span
+                    id="activeSlotTag"
+                    class="text-[11px] font-mono px-2 text-cyan-300 font-semibold select-none"
+                    >Slot 1/10</span
+                  >
+                  <button
+                    id="btnNextChannel"
+                    title="Next Channel"
+                    class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-cyber-800 transition-colors"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Large Hero Swatch & Title Area -->
+              <div class="my-4 flex flex-col items-center text-center">
+                <div class="relative group my-1">
+                  <div
+                    id="activeSwatchLarge"
+                    class="w-32 h-32 sm:w-36 sm:h-36 rounded-3xl shadow-2xl border-4 border-white/20 transition-all duration-300 transform group-hover:scale-105 flex items-end justify-end p-2.5"
+                    style="background-color: rgb(59, 66, 82)"
+                  >
+                    <span
+                      id="luminanceBadge"
+                      class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-black/70 text-white backdrop-blur-sm border border-white/10 font-medium"
+                      >Dark Tone</span
+                    >
+                  </div>
+                </div>
+
+                <h2
+                  id="activeTitle"
+                  class="text-2xl font-black text-white tracking-wide mt-1"
+                >
+                  Body
+                </h2>
+                <p
+                  id="activeDesc"
+                  class="text-xs text-slate-400 mt-0.5 font-normal"
+                >
+                  Primary anatomical pigmentation layer
+                </p>
+              </div>
+
+              <!-- Live RGB Values Metric Grid -->
+              <div class="grid grid-cols-3 gap-2 text-xs font-mono my-2">
+                <div
+                  class="bg-cyber-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col gap-0.5"
+                >
+                  <span
+                    class="text-[10px] text-red-400 font-bold uppercase tracking-wider"
+                    >Red (R)</span
+                  >
+                  <span id="metricR" class="font-bold text-red-300 text-sm"
+                    >59</span
+                  >
+                </div>
+                <div
+                  class="bg-cyber-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col gap-0.5"
+                >
+                  <span
+                    class="text-[10px] text-green-400 font-bold uppercase tracking-wider"
+                    >Green (G)</span
+                  >
+                  <span id="metricG" class="font-bold text-green-300 text-sm"
+                    >66</span
+                  >
+                </div>
+                <div
+                  class="bg-cyber-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col gap-0.5"
+                >
+                  <span
+                    class="text-[10px] text-blue-400 font-bold uppercase tracking-wider"
+                    >Blue (B)</span
+                  >
+                  <span id="metricB" class="font-bold text-blue-300 text-sm"
+                    >82</span
+                  >
+                </div>
+                <div
+                  class="bg-cyber-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col gap-0.5 col-span-3"
+                >
+                  <span
+                    class="text-[10px] text-slate-500 uppercase tracking-wider"
+                    >Combined RGB Coordinates</span
+                  >
+                  <span
+                    id="activeRgbDisplay"
+                    class="font-bold text-cyan-300 text-sm tracking-wide"
+                    >rgb(59, 66, 82)</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Action Buttons for Active Channel -->
+            <div
+              class="pt-3 border-t border-white/10 flex items-center justify-between gap-2 mt-2"
+            >
+              <button
+                id="btnResetChannel"
+                class="px-3 py-1.5 rounded-xl bg-cyber-900 border border-white/10 text-xs font-semibold text-slate-400 hover:text-white hover:bg-cyber-850 transition-colors flex items-center gap-1.5 shadow-sm"
+              >
+                <svg
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                Default
+              </button>
+              <button
+                id="btnCopyCurrentRgb"
+                class="px-3.5 py-1.5 rounded-xl bg-cyan-600/30 border border-cyan-500/40 text-cyan-200 hover:bg-cyan-600/50 hover:text-white transition-all text-xs font-mono font-semibold flex items-center gap-1.5 shadow-sm"
+              >
+                <svg
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2"
+                  />
+                </svg>
+                Copy RGB
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Interactive Color Wheel & Precision Calibration Studio (8 Cols on wide screen) -->
+        <div class="lg:col-span-8 xl:col-span-8 flex flex-col">
+          <div
+            class="glass-panel rounded-2xl p-4 sm:p-5 border border-white/10 shadow-2xl flex-1 flex flex-col justify-between relative"
+          >
+            <!-- Inspector Header -->
+            <div
+              class="flex items-center justify-between pb-3 border-b border-white/10 gap-3"
+            >
+              <div>
+                <h3 class="text-base font-bold text-white tracking-wide">
+                  RGB Color Wheel & Precision Calibration
+                </h3>
+                <p class="text-xs text-slate-400">
+                  Interactive polar hue & saturation wheel with individual
+                  channel fine calibration
+                </p>
+              </div>
+
+              <!-- Direct RGB Input Box -->
+              <div
+                class="bg-cyber-900 border border-white/10 rounded-xl px-2.5 py-1.5 flex items-center gap-1.5 shadow-inner"
+              >
+                <span class="text-[11px] text-slate-400 font-mono font-medium"
+                  >RGB</span
+                >
+                <input
+                  id="inputRgbDirect"
+                  type="text"
+                  value="59, 66, 82"
+                  placeholder="r, g, b"
+                  class="w-32 bg-transparent text-xs font-mono font-bold text-cyan-300 focus:outline-none text-center"
+                />
+              </div>
+            </div>
+
+            <!-- Color Wheel & Sliders Grid -->
+            <div
+              class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center py-4 my-auto"
+            >
+              <!-- Polar Color Wheel Canvas Column (MD: 5-6 Cols) -->
+              <div
+                class="md:col-span-5 flex flex-col items-center justify-center gap-3 select-none"
+              >
+                <div
+                  class="relative w-[210px] h-[210px] flex items-center justify-center"
+                >
+                  <!-- Color Wheel Canvas -->
+                  <canvas
+                    id="wheelCanvas"
+                    width="210"
+                    height="210"
+                    class="rounded-full shadow-2xl cursor-crosshair border-2 border-white/10"
+                  ></canvas>
+
+                  <!-- Wheel Marker Pin -->
+                  <div
+                    id="wheelPin"
+                    class="absolute w-5 h-5 -ml-2.5 -mt-2.5 rounded-full border-2 border-white pointer-events-none shadow-lg transition-transform duration-75"
+                    style="left: 105px; top: 105px; background: #3b4252"
+                  ></div>
+                </div>
+
+                <!-- Luminance / Brightness Track -->
+                <div class="w-full max-w-[210px] flex flex-col gap-1.5">
+                  <div
+                    class="flex justify-between text-[11px] font-mono text-slate-400"
+                  >
+                    <span>Luminance / Brightness</span>
+                    <span id="labelValue" class="text-slate-200 font-bold"
+                      >100%</span
+                    >
+                  </div>
+                  <input
+                    id="sliderValue"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="100"
+                    class="w-full h-2 rounded-full cursor-pointer shadow-inner"
+                    style="background: linear-gradient(to right, #000, #fff)"
+                  />
+                </div>
+              </div>
+
+              <!-- Precision RGB Sliders Column (MD: 7 Cols) -->
+              <div class="md:col-span-7 flex flex-col gap-3">
+                <!-- Red Slider -->
+                <div
+                  class="bg-cyber-900/80 p-3 rounded-xl border border-white/5 flex flex-col gap-1.5 shadow-sm"
+                >
+                  <div
+                    class="flex items-center justify-between text-xs font-mono"
+                  >
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm shadow-red-500/50"
+                      ></span>
+                      <span class="font-bold text-slate-200">Red Channel</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <input
+                        id="numR"
+                        type="number"
+                        min="0"
+                        max="255"
+                        value="59"
+                        class="w-14 bg-cyber-800 border border-white/10 rounded-lg px-2 py-0.5 text-right font-mono text-xs text-red-400 font-bold focus:outline-none focus:border-red-500"
+                      />
+                      <span class="text-[10px] text-slate-500">/ 255</span>
+                    </div>
+                  </div>
+                  <input
+                    id="sliderR"
+                    type="range"
+                    min="0"
+                    max="255"
+                    value="59"
+                    class="w-full"
+                    style="background: linear-gradient(to right, #111, #ef4444)"
+                  />
+                </div>
+
+                <!-- Green Slider -->
+                <div
+                  class="bg-cyber-900/80 p-3 rounded-xl border border-white/5 flex flex-col gap-1.5 shadow-sm"
+                >
+                  <div
+                    class="flex items-center justify-between text-xs font-mono"
+                  >
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-sm shadow-green-500/50"
+                      ></span>
+                      <span class="font-bold text-slate-200"
+                        >Green Channel</span
+                      >
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <input
+                        id="numG"
+                        type="number"
+                        min="0"
+                        max="255"
+                        value="66"
+                        class="w-14 bg-cyber-800 border border-white/10 rounded-lg px-2 py-0.5 text-right font-mono text-xs text-green-400 font-bold focus:outline-none focus:border-green-500"
+                      />
+                      <span class="text-[10px] text-slate-500">/ 255</span>
+                    </div>
+                  </div>
+                  <input
+                    id="sliderG"
+                    type="range"
+                    min="0"
+                    max="255"
+                    value="66"
+                    class="w-full"
+                    style="background: linear-gradient(to right, #111, #22c55e)"
+                  />
+                </div>
+
+                <!-- Blue Slider -->
+                <div
+                  class="bg-cyber-900/80 p-3 rounded-xl border border-white/5 flex flex-col gap-1.5 shadow-sm"
+                >
+                  <div
+                    class="flex items-center justify-between text-xs font-mono"
+                  >
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50"
+                      ></span>
+                      <span class="font-bold text-slate-200">Blue Channel</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <input
+                        id="numB"
+                        type="number"
+                        min="0"
+                        max="255"
+                        value="82"
+                        class="w-14 bg-cyber-800 border border-white/10 rounded-lg px-2 py-0.5 text-right font-mono text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500"
+                      />
+                      <span class="text-[10px] text-slate-500">/ 255</span>
+                    </div>
+                  </div>
+                  <input
+                    id="sliderB"
+                    type="range"
+                    min="0"
+                    max="255"
+                    value="82"
+                    class="w-full"
+                    style="background: linear-gradient(to right, #111, #3b82f6)"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Palette Row -->
+            <div
+              class="pt-3 border-t border-white/10 flex items-center justify-between flex-wrap gap-2"
+            >
+              <span
+                class="text-[11px] font-mono text-slate-400 uppercase tracking-wider"
+                >Quick Swatches:</span
+              >
+              <div id="quickSwatches" class="flex items-center gap-2 flex-wrap">
+                <!-- Dynamically populated color dots -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Grid: All 10 Individual RGB Color Sections -->
+      <div class="flex flex-col gap-3 pb-4">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+            <h2 class="text-sm sm:text-base font-bold text-white tracking-wide">
+              All 10 Color Sections Overview
+            </h2>
+          </div>
+          <p class="text-xs text-slate-400">
+            Select any channel card to calibrate via RGB color wheel
+          </p>
+        </div>
+
+        <!-- 10 Channel Cards Grid: Balanced 5-col on desktop -->
+        <div
+          id="channelsGrid"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5"
+        >
+          <!-- Rendered by JavaScript -->
+        </div>
+      </div>
+    </main>
+
+    <!-- Export Modal Overlay -->
+    <div
+      id="exportModal"
+      class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4"
+    >
+      <div
+        class="glass-panel w-full max-w-xl rounded-2xl border border-white/15 p-6 shadow-2xl flex flex-col gap-4"
+      >
+        <div
+          class="flex items-center justify-between border-b border-white/10 pb-3"
+        >
+          <div>
+            <h3 class="text-lg font-bold text-white">Export Flat RGB Stream</h3>
+            <p class="text-xs text-slate-400">
+              Space-delimited RGB triplet stream for all 10 anatomical channels
+              (30 integers)
+            </p>
+          </div>
+          <button
+            id="btnCloseExport"
+            class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-cyber-800 transition-colors"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Format Information & Stream Badge -->
+        <div
+          class="flex items-center justify-between border-b border-white/10 pb-3"
+        >
+          <p class="text-[11px] text-slate-300 font-mono">
+            Format:
+            <span class="text-cyan-300">R G B R G B ... (Body → Claws)</span>
+          </p>
+          <div class="flex items-center gap-2">
+            <span
+              class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-cyber-900 text-slate-300 border border-white/10"
+              >30 values</span
+            >
+            <span
+              id="exportLengthBadge"
+              class="text-[11px] font-mono px-2 py-0.5 rounded-lg bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 font-semibold"
+              >0 chars</span
+            >
+          </div>
+        </div>
+
+        <!-- Export Textarea -->
+        <textarea
+          id="exportTextarea"
+          readonly
+          class="w-full h-32 bg-cyber-950 border border-white/10 rounded-xl p-3.5 font-mono text-sm leading-relaxed text-cyan-300 focus:outline-none resize-none shadow-inner select-all"
+        ></textarea>
+
+        <!-- Modal Footer -->
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-slate-400 font-mono"
+            >Ready for Console / Command Input</span
+          >
+          <div class="flex items-center gap-2">
+            <button
+              id="btnCopyExport"
+              class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs shadow-lg shadow-cyan-900/30 flex items-center gap-2 transition-all active:scale-95"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2"
+                />
+              </svg>
+              Copy Flat Stream
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- Notification Toast Message Box -->
-  <div id="toastMessage" class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-cyber-850 border border-cyan-400/40 text-cyan-200 px-4 py-2.5 rounded-xl shadow-2xl shadow-cyan-950 text-xs font-mono transform translate-y-12 opacity-0 transition-all duration-300 pointer-events-none">
-    <svg class="w-4 h-4 text-cyan-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-    </svg>
-    <span id="toastText">Color copied!</span>
-  </div>
+    <!-- Notification Toast Message Box -->
+    <div
+      id="toastMessage"
+      class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-cyber-850 border border-cyan-400/40 text-cyan-200 px-4 py-2.5 rounded-xl shadow-2xl shadow-cyan-950 text-xs font-mono transform translate-y-12 opacity-0 transition-all duration-300 pointer-events-none"
+    >
+      <svg
+        class="w-4 h-4 text-cyan-400 flex-shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 13l4 4L19 7"
+        />
+      </svg>
+      <span id="toastText">Color copied!</span>
+    </div>
 
-  <script>
-    // 10 Anatomical channels with the word "Color" removed
-    const CHANNELS = [
-      { id: 'Body', label: 'Body', desc: 'Primary anatomical pigmentation layer', default: [59, 66, 82] },
-      { id: 'Markings', label: 'Markings', desc: 'Dorsal stripes and distinct patterns', default: [235, 94, 40] },
-      { id: 'Flank', label: 'Flank', desc: 'Lateral torso and side shading', default: [76, 86, 106] },
-      { id: 'Underbelly', label: 'Underbelly', desc: 'Ventral belly and throat scales', default: [216, 222, 233] },
-      { id: 'Detail1', label: 'Detail 1', desc: 'Spine ridges and secondary accents', default: [235, 203, 139] },
-      { id: 'Eyes', label: 'Eyes', desc: 'Ocular iris and predatory gaze', default: [208, 135, 112] },
-      { id: 'MaleDisplay', label: 'Male Display', desc: 'Crest, plumage, and sexual dimorphism', default: [180, 142, 173] },
-      { id: 'Teeth', label: 'Teeth', desc: 'Dental enamel and serration tips', default: [236, 239, 244] },
-      { id: 'Mouth', label: 'Mouth', desc: 'Interior oral cavity and gums', default: [191, 97, 106] },
-      { id: 'Claws', label: 'Claws', desc: 'Keratin talons and foot appendages', default: [46, 52, 64] }
-    ];
-
-    // Presets
-    const PRESETS = {
-      forest_apex: {
-        Body: [48, 62, 42],
-        Markings: [30, 40, 26],
-        Flank: [68, 84, 58],
-        Underbelly: [168, 162, 134],
-        Detail1: [142, 92, 46],
-        Eyes: [245, 158, 11],
-        MaleDisplay: [185, 58, 42],
-        Teeth: [240, 238, 230],
-        Mouth: [180, 50, 60],
-        Claws: [32, 34, 30]
-      },
-      swamp_titan: {
-        Body: [34, 48, 54],
-        Markings: [14, 116, 144],
-        Flank: [52, 73, 82],
-        Underbelly: [186, 205, 214],
-        Detail1: [234, 88, 12],
-        Eyes: [250, 204, 21],
-        MaleDisplay: [194, 65, 12],
-        Teeth: [245, 248, 250],
-        Mouth: [159, 18, 57],
-        Claws: [20, 28, 32]
-      },
-      pack_alpha: {
-        Body: [115, 85, 55],
-        Markings: [30, 25, 22],
-        Flank: [140, 108, 72],
-        Underbelly: [215, 195, 165],
-        Detail1: [59, 130, 246],
-        Eyes: [220, 38, 38],
-        MaleDisplay: [147, 51, 234],
-        Teeth: [248, 245, 235],
-        Mouth: [225, 29, 72],
-        Claws: [18, 18, 20]
-      },
-      crimson_bull: {
-        Body: [38, 34, 36],
-        Markings: [220, 38, 38],
-        Flank: [58, 50, 52],
-        Underbelly: [160, 130, 130],
-        Detail1: [245, 101, 101],
-        Eyes: [249, 115, 22],
-        MaleDisplay: [153, 27, 27],
-        Teeth: [240, 235, 230],
-        Mouth: [136, 19, 55],
-        Claws: [25, 20, 22]
-      },
-      glacial_plumage: {
-        Body: [225, 235, 245],
-        Markings: [70, 95, 130],
-        Flank: [185, 200, 220],
-        Underbelly: [245, 250, 255],
-        Detail1: [56, 189, 248],
-        Eyes: [14, 165, 233],
-        MaleDisplay: [99, 102, 241],
-        Teeth: [250, 250, 255],
-        Mouth: [140, 50, 90],
-        Claws: [35, 45, 60]
-      },
-      scythe_blossom: {
-        Body: [45, 60, 48],
-        Markings: [236, 72, 153],
-        Flank: [70, 90, 75],
-        Underbelly: [190, 200, 185],
-        Detail1: [244, 114, 182],
-        Eyes: [16, 185, 129],
-        MaleDisplay: [219, 39, 119],
-        Teeth: [235, 235, 220],
-        Mouth: [190, 80, 110],
-        Claws: [245, 242, 235]
-      },
-      iron_bastion: {
-        Body: [75, 68, 60],
-        Markings: [180, 83, 9],
-        Flank: [100, 90, 80],
-        Underbelly: [195, 185, 170],
-        Detail1: [140, 120, 100],
-        Eyes: [161, 98, 7],
-        MaleDisplay: [217, 119, 6],
-        Teeth: [220, 215, 200],
-        Mouth: [160, 70, 70],
-        Claws: [45, 40, 35]
-      },
-      mangrove_fisher: {
-        Body: [40, 52, 45],
-        Markings: [6, 182, 212],
-        Flank: [65, 80, 70],
-        Underbelly: [200, 210, 195],
-        Detail1: [20, 184, 166],
-        Eyes: [234, 179, 8],
-        MaleDisplay: [13, 148, 136],
-        Teeth: [240, 245, 240],
-        Mouth: [180, 60, 80],
-        Claws: [30, 40, 35]
-      },
-      sunfire_plates: {
-        Body: [60, 55, 45],
-        Markings: [245, 158, 11],
-        Flank: [90, 80, 65],
-        Underbelly: [210, 200, 175],
-        Detail1: [239, 68, 68],
-        Eyes: [168, 85, 247],
-        MaleDisplay: [234, 88, 12],
-        Teeth: [230, 230, 220],
-        Mouth: [175, 55, 65],
-        Claws: [50, 42, 35]
-      },
-      savanna_ravager: {
-        Body: [85, 75, 60],
-        Markings: [28, 25, 20],
-        Flank: [115, 100, 80],
-        Underbelly: [220, 210, 190],
-        Detail1: [194, 65, 12],
-        Eyes: [220, 38, 38],
-        MaleDisplay: [180, 83, 9],
-        Teeth: [242, 238, 230],
-        Mouth: [165, 30, 45],
-        Claws: [32, 28, 24]
-      },
-      apex: {
-        Body: [59, 66, 82],
-        Markings: [235, 94, 40],
-        Flank: [76, 86, 106],
-        Underbelly: [216, 222, 233],
-        Detail1: [235, 203, 139],
-        Eyes: [208, 135, 112],
-        MaleDisplay: [180, 142, 173],
-        Teeth: [236, 239, 244],
-        Mouth: [191, 97, 106],
-        Claws: [46, 52, 64]
-      },
-      bioluminescent: {
-        Body: [10, 20, 35],
-        Markings: [0, 255, 214],
-        Flank: [18, 38, 58],
-        Underbelly: [5, 12, 22],
-        Detail1: [74, 222, 128],
-        Eyes: [0, 240, 255],
-        MaleDisplay: [192, 132, 252],
-        Teeth: [200, 240, 255],
-        Mouth: [30, 20, 50],
-        Claws: [6, 78, 92]
-      },
-      magma: {
-        Body: [28, 25, 23],
-        Markings: [249, 115, 22],
-        Flank: [68, 64, 60],
-        Underbelly: [120, 53, 15],
-        Detail1: [250, 204, 21],
-        Eyes: [239, 68, 68],
-        MaleDisplay: [220, 38, 38],
-        Teeth: [245, 245, 244],
-        Mouth: [153, 27, 27],
-        Claws: [17, 14, 13]
-      },
-      toxic: {
-        Body: [20, 30, 20],
-        Markings: [132, 204, 22],
-        Flank: [40, 55, 30],
-        Underbelly: [77, 124, 15],
-        Detail1: [217, 249, 157],
-        Eyes: [250, 204, 21],
-        MaleDisplay: [168, 85, 247],
-        Teeth: [240, 253, 244],
-        Mouth: [136, 19, 55],
-        Claws: [15, 23, 15]
-      },
-      spectral: {
-        Body: [226, 232, 240],
-        Markings: [203, 213, 225],
-        Flank: [241, 245, 249],
-        Underbelly: [248, 250, 252],
-        Detail1: [148, 163, 184],
-        Eyes: [239, 68, 68],
-        MaleDisplay: [244, 114, 182],
-        Teeth: [255, 255, 255],
-        Mouth: [251, 113, 133],
-        Claws: [100, 116, 139]
-      },
-      cyber: {
-        Body: [15, 23, 42],
-        Markings: [236, 72, 153],
-        Flank: [30, 41, 59],
-        Underbelly: [10, 15, 30],
-        Detail1: [6, 182, 212],
-        Eyes: [234, 179, 8],
-        MaleDisplay: [168, 85, 247],
-        Teeth: [241, 245, 249],
-        Mouth: [159, 18, 57],
-        Claws: [51, 65, 85]
-      },
-      sandwyrm: {
-        Body: [168, 139, 107],
-        Markings: [120, 75, 40],
-        Flank: [194, 164, 132],
-        Underbelly: [229, 217, 199],
-        Detail1: [202, 138, 4],
-        Eyes: [67, 56, 202],
-        MaleDisplay: [180, 83, 9],
-        Teeth: [250, 245, 235],
-        Mouth: [159, 18, 57],
-        Claws: [68, 48, 30]
-      }
-    };
-
-    // Quick selection swatches
-    const QUICK_PALETTE = [
-      [239, 68, 68], [249, 115, 22], [234, 179, 8], [34, 197, 94],
-      [6, 182, 212], [59, 130, 246], [168, 85, 247], [236, 72, 153],
-      [248, 250, 252], [148, 163, 184], [30, 41, 59], [15, 23, 42]
-    ];
-
-    // Master Application State
-    const state = {
-      activeId: 'Body',
-      colors: {},
-      isDraggingWheel: false
-    };
-
-    // Initialize state colors with defaults
-    CHANNELS.forEach(c => {
-      state.colors[c.id] = [...c.default];
-    });
-
-    // RGB Utilities
-    function clamp(val, min = 0, max = 255) {
-      return Math.max(min, Math.min(max, Math.round(val)));
-    }
-
-    function toRgbString(r, g, b) {
-      return `rgb(${clamp(r)}, ${clamp(g)}, ${clamp(b)})`;
-    }
-
-    function rgbToHsv(r, g, b) {
-      r /= 255; g /= 255; b /= 255;
-      const max = Math.max(r, g, b), min = Math.min(r, g, b);
-      const d = max - min;
-      let h = 0;
-      const s = max === 0 ? 0 : d / max;
-      const v = max;
-
-      if (max !== min) {
-        switch (max) {
-          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-          case g: h = (b - r) / d + 2; break;
-          case b: h = (r - g) / d + 4; break;
-        }
-        h /= 6;
-      }
-      return { h: h * 360, s, v };
-    }
-
-    function hsvToRgb(h, s, v) {
-      h = (h % 360 + 360) % 360;
-      const c = v * s;
-      const x = c * (1 - Math.abs((h / 60) % 2 - 1));
-      const m = v - c;
-      let r = 0, g = 0, b = 0;
-
-      if (h < 60) { r = c; g = x; b = 0; }
-      else if (h < 120) { r = x; g = c; b = 0; }
-      else if (h < 180) { r = 0; g = c; b = x; }
-      else if (h < 240) { r = 0; g = x; b = c; }
-      else if (h < 300) { r = x; g = 0; b = c; }
-      else { r = c; g = 0; b = x; }
-
-      return [
-        Math.round((r + m) * 255),
-        Math.round((g + m) * 255),
-        Math.round((b + m) * 255)
+    <script>
+      // 10 Anatomical channels with the word "Color" removed
+      const CHANNELS = [
+        {
+          id: "Body",
+          label: "Body",
+          desc: "Primary anatomical pigmentation layer",
+          default: [59, 66, 82],
+        },
+        {
+          id: "Markings",
+          label: "Markings",
+          desc: "Dorsal stripes and distinct patterns",
+          default: [235, 94, 40],
+        },
+        {
+          id: "Flank",
+          label: "Flank",
+          desc: "Lateral torso and side shading",
+          default: [76, 86, 106],
+        },
+        {
+          id: "Underbelly",
+          label: "Underbelly",
+          desc: "Ventral belly and throat scales",
+          default: [216, 222, 233],
+        },
+        {
+          id: "Detail1",
+          label: "Detail 1",
+          desc: "Spine ridges and secondary accents",
+          default: [235, 203, 139],
+        },
+        {
+          id: "Eyes",
+          label: "Eyes",
+          desc: "Ocular iris and predatory gaze",
+          default: [208, 135, 112],
+        },
+        {
+          id: "MaleDisplay",
+          label: "Male Display",
+          desc: "Crest, plumage, and sexual dimorphism",
+          default: [180, 142, 173],
+        },
+        {
+          id: "Teeth",
+          label: "Teeth",
+          desc: "Dental enamel and serration tips",
+          default: [236, 239, 244],
+        },
+        {
+          id: "Mouth",
+          label: "Mouth",
+          desc: "Interior oral cavity and gums",
+          default: [191, 97, 106],
+        },
+        {
+          id: "Claws",
+          label: "Claws",
+          desc: "Keratin talons and foot appendages",
+          default: [46, 52, 64],
+        },
       ];
-    }
 
-    // Color Wheel Canvas Rendering
-    const wheelCanvas = document.getElementById('wheelCanvas');
-    const wheelCtx = wheelCanvas.getContext('2d');
-    const wheelSize = wheelCanvas.width;
-    const wheelRadius = wheelSize / 2;
+      // Presets
+      const PRESETS = {
+        forest_apex: {
+          Body: [48, 62, 42],
+          Markings: [30, 40, 26],
+          Flank: [68, 84, 58],
+          Underbelly: [168, 162, 134],
+          Detail1: [142, 92, 46],
+          Eyes: [245, 158, 11],
+          MaleDisplay: [185, 58, 42],
+          Teeth: [240, 238, 230],
+          Mouth: [180, 50, 60],
+          Claws: [32, 34, 30],
+        },
+        swamp_titan: {
+          Body: [34, 48, 54],
+          Markings: [14, 116, 144],
+          Flank: [52, 73, 82],
+          Underbelly: [186, 205, 214],
+          Detail1: [234, 88, 12],
+          Eyes: [250, 204, 21],
+          MaleDisplay: [194, 65, 12],
+          Teeth: [245, 248, 250],
+          Mouth: [159, 18, 57],
+          Claws: [20, 28, 32],
+        },
+        pack_alpha: {
+          Body: [115, 85, 55],
+          Markings: [30, 25, 22],
+          Flank: [140, 108, 72],
+          Underbelly: [215, 195, 165],
+          Detail1: [59, 130, 246],
+          Eyes: [220, 38, 38],
+          MaleDisplay: [147, 51, 234],
+          Teeth: [248, 245, 235],
+          Mouth: [225, 29, 72],
+          Claws: [18, 18, 20],
+        },
+        crimson_bull: {
+          Body: [38, 34, 36],
+          Markings: [220, 38, 38],
+          Flank: [58, 50, 52],
+          Underbelly: [160, 130, 130],
+          Detail1: [245, 101, 101],
+          Eyes: [249, 115, 22],
+          MaleDisplay: [153, 27, 27],
+          Teeth: [240, 235, 230],
+          Mouth: [136, 19, 55],
+          Claws: [25, 20, 22],
+        },
+        glacial_plumage: {
+          Body: [225, 235, 245],
+          Markings: [70, 95, 130],
+          Flank: [185, 200, 220],
+          Underbelly: [245, 250, 255],
+          Detail1: [56, 189, 248],
+          Eyes: [14, 165, 233],
+          MaleDisplay: [99, 102, 241],
+          Teeth: [250, 250, 255],
+          Mouth: [140, 50, 90],
+          Claws: [35, 45, 60],
+        },
+        scythe_blossom: {
+          Body: [45, 60, 48],
+          Markings: [236, 72, 153],
+          Flank: [70, 90, 75],
+          Underbelly: [190, 200, 185],
+          Detail1: [244, 114, 182],
+          Eyes: [16, 185, 129],
+          MaleDisplay: [219, 39, 119],
+          Teeth: [235, 235, 220],
+          Mouth: [190, 80, 110],
+          Claws: [245, 242, 235],
+        },
+        iron_bastion: {
+          Body: [75, 68, 60],
+          Markings: [180, 83, 9],
+          Flank: [100, 90, 80],
+          Underbelly: [195, 185, 170],
+          Detail1: [140, 120, 100],
+          Eyes: [161, 98, 7],
+          MaleDisplay: [217, 119, 6],
+          Teeth: [220, 215, 200],
+          Mouth: [160, 70, 70],
+          Claws: [45, 40, 35],
+        },
+        mangrove_fisher: {
+          Body: [40, 52, 45],
+          Markings: [6, 182, 212],
+          Flank: [65, 80, 70],
+          Underbelly: [200, 210, 195],
+          Detail1: [20, 184, 166],
+          Eyes: [234, 179, 8],
+          MaleDisplay: [13, 148, 136],
+          Teeth: [240, 245, 240],
+          Mouth: [180, 60, 80],
+          Claws: [30, 40, 35],
+        },
+        sunfire_plates: {
+          Body: [60, 55, 45],
+          Markings: [245, 158, 11],
+          Flank: [90, 80, 65],
+          Underbelly: [210, 200, 175],
+          Detail1: [239, 68, 68],
+          Eyes: [168, 85, 247],
+          MaleDisplay: [234, 88, 12],
+          Teeth: [230, 230, 220],
+          Mouth: [175, 55, 65],
+          Claws: [50, 42, 35],
+        },
+        savanna_ravager: {
+          Body: [85, 75, 60],
+          Markings: [28, 25, 20],
+          Flank: [115, 100, 80],
+          Underbelly: [220, 210, 190],
+          Detail1: [194, 65, 12],
+          Eyes: [220, 38, 38],
+          MaleDisplay: [180, 83, 9],
+          Teeth: [242, 238, 230],
+          Mouth: [165, 30, 45],
+          Claws: [32, 28, 24],
+        },
+        apex: {
+          Body: [59, 66, 82],
+          Markings: [235, 94, 40],
+          Flank: [76, 86, 106],
+          Underbelly: [216, 222, 233],
+          Detail1: [235, 203, 139],
+          Eyes: [208, 135, 112],
+          MaleDisplay: [180, 142, 173],
+          Teeth: [236, 239, 244],
+          Mouth: [191, 97, 106],
+          Claws: [46, 52, 64],
+        },
+        bioluminescent: {
+          Body: [10, 20, 35],
+          Markings: [0, 255, 214],
+          Flank: [18, 38, 58],
+          Underbelly: [5, 12, 22],
+          Detail1: [74, 222, 128],
+          Eyes: [0, 240, 255],
+          MaleDisplay: [192, 132, 252],
+          Teeth: [200, 240, 255],
+          Mouth: [30, 20, 50],
+          Claws: [6, 78, 92],
+        },
+        magma: {
+          Body: [28, 25, 23],
+          Markings: [249, 115, 22],
+          Flank: [68, 64, 60],
+          Underbelly: [120, 53, 15],
+          Detail1: [250, 204, 21],
+          Eyes: [239, 68, 68],
+          MaleDisplay: [220, 38, 38],
+          Teeth: [245, 245, 244],
+          Mouth: [153, 27, 27],
+          Claws: [17, 14, 13],
+        },
+        toxic: {
+          Body: [20, 30, 20],
+          Markings: [132, 204, 22],
+          Flank: [40, 55, 30],
+          Underbelly: [77, 124, 15],
+          Detail1: [217, 249, 157],
+          Eyes: [250, 204, 21],
+          MaleDisplay: [168, 85, 247],
+          Teeth: [240, 253, 244],
+          Mouth: [136, 19, 55],
+          Claws: [15, 23, 15],
+        },
+        spectral: {
+          Body: [226, 232, 240],
+          Markings: [203, 213, 225],
+          Flank: [241, 245, 249],
+          Underbelly: [248, 250, 252],
+          Detail1: [148, 163, 184],
+          Eyes: [239, 68, 68],
+          MaleDisplay: [244, 114, 182],
+          Teeth: [255, 255, 255],
+          Mouth: [251, 113, 133],
+          Claws: [100, 116, 139],
+        },
+        cyber: {
+          Body: [15, 23, 42],
+          Markings: [236, 72, 153],
+          Flank: [30, 41, 59],
+          Underbelly: [10, 15, 30],
+          Detail1: [6, 182, 212],
+          Eyes: [234, 179, 8],
+          MaleDisplay: [168, 85, 247],
+          Teeth: [241, 245, 249],
+          Mouth: [159, 18, 57],
+          Claws: [51, 65, 85],
+        },
+        sandwyrm: {
+          Body: [168, 139, 107],
+          Markings: [120, 75, 40],
+          Flank: [194, 164, 132],
+          Underbelly: [229, 217, 199],
+          Detail1: [202, 138, 4],
+          Eyes: [67, 56, 202],
+          MaleDisplay: [180, 83, 9],
+          Teeth: [250, 245, 235],
+          Mouth: [159, 18, 57],
+          Claws: [68, 48, 30],
+        },
+      };
 
-    function renderWheel(brightnessMultiplier = 1.0) {
-      const imgData = wheelCtx.createImageData(wheelSize, wheelSize);
-      const data = imgData.data;
+      // Quick selection swatches
+      const QUICK_PALETTE = [
+        [239, 68, 68],
+        [249, 115, 22],
+        [234, 179, 8],
+        [34, 197, 94],
+        [6, 182, 212],
+        [59, 130, 246],
+        [168, 85, 247],
+        [236, 72, 153],
+        [248, 250, 252],
+        [148, 163, 184],
+        [30, 41, 59],
+        [15, 23, 42],
+      ];
 
-      for (let y = 0; y < wheelSize; y++) {
-        for (let x = 0; x < wheelSize; x++) {
-          const dx = x - wheelRadius;
-          const dy = y - wheelRadius;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+      // Master Application State
+      const state = {
+        activeId: "Body",
+        colors: {},
+        isDraggingWheel: false,
+      };
 
-          const idx = (y * wheelSize + x) * 4;
+      // Initialize state colors with defaults
+      CHANNELS.forEach((c) => {
+        state.colors[c.id] = [...c.default];
+      });
 
-          if (dist <= wheelRadius) {
-            let angle = Math.atan2(dy, dx) * (180 / Math.PI);
-            if (angle < 0) angle += 360;
-            const sat = dist / wheelRadius;
-            const [r, g, b] = hsvToRgb(angle, sat, brightnessMultiplier);
+      // RGB Utilities
+      function clamp(val, min = 0, max = 255) {
+        return Math.max(min, Math.min(max, Math.round(val)));
+      }
 
-            data[idx] = r;
-            data[idx + 1] = g;
-            data[idx + 2] = b;
-            data[idx + 3] = 255;
-          } else {
-            data[idx + 3] = 0; // Transparent outside radius
+      function toRgbString(r, g, b) {
+        return `rgb(${clamp(r)}, ${clamp(g)}, ${clamp(b)})`;
+      }
+
+      function rgbToHsv(r, g, b) {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+        const max = Math.max(r, g, b),
+          min = Math.min(r, g, b);
+        const d = max - min;
+        let h = 0;
+        const s = max === 0 ? 0 : d / max;
+        const v = max;
+
+        if (max !== min) {
+          switch (max) {
+            case r:
+              h = (g - b) / d + (g < b ? 6 : 0);
+              break;
+            case g:
+              h = (b - r) / d + 2;
+              break;
+            case b:
+              h = (r - g) / d + 4;
+              break;
+          }
+          h /= 6;
+        }
+        return { h: h * 360, s, v };
+      }
+
+      function hsvToRgb(h, s, v) {
+        h = ((h % 360) + 360) % 360;
+        const c = v * s;
+        const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+        const m = v - c;
+        let r = 0,
+          g = 0,
+          b = 0;
+
+        if (h < 60) {
+          r = c;
+          g = x;
+          b = 0;
+        } else if (h < 120) {
+          r = x;
+          g = c;
+          b = 0;
+        } else if (h < 180) {
+          r = 0;
+          g = c;
+          b = x;
+        } else if (h < 240) {
+          r = 0;
+          g = x;
+          b = c;
+        } else if (h < 300) {
+          r = x;
+          g = 0;
+          b = c;
+        } else {
+          r = c;
+          g = 0;
+          b = x;
+        }
+
+        return [
+          Math.round((r + m) * 255),
+          Math.round((g + m) * 255),
+          Math.round((b + m) * 255),
+        ];
+      }
+
+      // Color Wheel Canvas Rendering
+      const wheelCanvas = document.getElementById("wheelCanvas");
+      const wheelCtx = wheelCanvas.getContext("2d");
+      const wheelSize = wheelCanvas.width;
+      const wheelRadius = wheelSize / 2;
+
+      function renderWheel(brightnessMultiplier = 1.0) {
+        const imgData = wheelCtx.createImageData(wheelSize, wheelSize);
+        const data = imgData.data;
+
+        for (let y = 0; y < wheelSize; y++) {
+          for (let x = 0; x < wheelSize; x++) {
+            const dx = x - wheelRadius;
+            const dy = y - wheelRadius;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            const idx = (y * wheelSize + x) * 4;
+
+            if (dist <= wheelRadius) {
+              let angle = Math.atan2(dy, dx) * (180 / Math.PI);
+              if (angle < 0) angle += 360;
+              const sat = dist / wheelRadius;
+              const [r, g, b] = hsvToRgb(angle, sat, brightnessMultiplier);
+
+              data[idx] = r;
+              data[idx + 1] = g;
+              data[idx + 2] = b;
+              data[idx + 3] = 255;
+            } else {
+              data[idx + 3] = 0; // Transparent outside radius
+            }
           }
         }
+        wheelCtx.putImageData(imgData, 0, 0);
       }
-      wheelCtx.putImageData(imgData, 0, 0);
-    }
 
-    function updateWheelPinPosition(r, g, b) {
-      const hsv = rgbToHsv(r, g, b);
-      const rad = (hsv.h * Math.PI) / 180;
-      const dist = hsv.s * wheelRadius;
+      function updateWheelPinPosition(r, g, b) {
+        const hsv = rgbToHsv(r, g, b);
+        const rad = (hsv.h * Math.PI) / 180;
+        const dist = hsv.s * wheelRadius;
 
-      const px = wheelRadius + dist * Math.cos(rad);
-      const py = wheelRadius + dist * Math.sin(rad);
+        const px = wheelRadius + dist * Math.cos(rad);
+        const py = wheelRadius + dist * Math.sin(rad);
 
-      const pin = document.getElementById('wheelPin');
-      pin.style.left = `${px}px`;
-      pin.style.top = `${py}px`;
-      pin.style.backgroundColor = toRgbString(r, g, b);
+        const pin = document.getElementById("wheelPin");
+        pin.style.left = `${px}px`;
+        pin.style.top = `${py}px`;
+        pin.style.backgroundColor = toRgbString(r, g, b);
 
-      const valPercent = Math.round(hsv.v * 100);
-      document.getElementById('sliderValue').value = valPercent;
-      document.getElementById('labelValue').textContent = `${valPercent}%`;
-    }
+        const valPercent = Math.round(hsv.v * 100);
+        document.getElementById("sliderValue").value = valPercent;
+        document.getElementById("labelValue").textContent = `${valPercent}%`;
+      }
 
-    // Core function: Set color for a channel and sync entire app strictly with RGB
-    function setColor(channelId, rgb, updateWheelGraphic = false) {
-      state.colors[channelId] = [...rgb];
-      const [r, g, b] = rgb;
-      const rgbCss = toRgbString(r, g, b);
+      // Core function: Set color for a channel and sync entire app strictly with RGB
+      function setColor(channelId, rgb, updateWheelGraphic = false) {
+        state.colors[channelId] = [...rgb];
+        const [r, g, b] = rgb;
+        const rgbCss = toRgbString(r, g, b);
 
-      // If updating active channel, refresh inspector inputs & metric displays
-      if (state.activeId === channelId) {
-        document.getElementById('sliderR').value = r;
-        document.getElementById('sliderG').value = g;
-        document.getElementById('sliderB').value = b;
-        document.getElementById('numR').value = r;
-        document.getElementById('numG').value = g;
-        document.getElementById('numB').value = b;
-        document.getElementById('metricR').textContent = r;
-        document.getElementById('metricG').textContent = g;
-        document.getElementById('metricB').textContent = b;
-        document.getElementById('inputRgbDirect').value = `${r}, ${g}, ${b}`;
-        document.getElementById('activeSwatchLarge').style.backgroundColor = rgbCss;
-        document.getElementById('activeRgbDisplay').textContent = rgbCss;
-        
-        // Relative perceived luminance calculation
-        const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-        const lumBadge = document.getElementById('luminanceBadge');
-        if (lumBadge) {
-          lumBadge.textContent = lum > 0.5 ? 'Light Tone' : 'Dark Tone';
+        // If updating active channel, refresh inspector inputs & metric displays
+        if (state.activeId === channelId) {
+          document.getElementById("sliderR").value = r;
+          document.getElementById("sliderG").value = g;
+          document.getElementById("sliderB").value = b;
+          document.getElementById("numR").value = r;
+          document.getElementById("numG").value = g;
+          document.getElementById("numB").value = b;
+          document.getElementById("metricR").textContent = r;
+          document.getElementById("metricG").textContent = g;
+          document.getElementById("metricB").textContent = b;
+          document.getElementById("inputRgbDirect").value = `${r}, ${g}, ${b}`;
+          document.getElementById("activeSwatchLarge").style.backgroundColor =
+            rgbCss;
+          document.getElementById("activeRgbDisplay").textContent = rgbCss;
+
+          // Relative perceived luminance calculation
+          const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+          const lumBadge = document.getElementById("luminanceBadge");
+          if (lumBadge) {
+            lumBadge.textContent = lum > 0.5 ? "Light Tone" : "Dark Tone";
+          }
+
+          updateWheelPinPosition(r, g, b);
+
+          if (updateWheelGraphic) {
+            const hsv = rgbToHsv(r, g, b);
+            renderWheel(hsv.v);
+          }
         }
 
-        updateWheelPinPosition(r, g, b);
-
-        if (updateWheelGraphic) {
-          const hsv = rgbToHsv(r, g, b);
-          renderWheel(hsv.v);
+        // Update Card in channels overview grid
+        const card = document.getElementById(`card-${channelId}`);
+        if (card) {
+          const swatch = card.querySelector(".channel-swatch");
+          const rgbText = card.querySelector(".channel-rgb");
+          if (swatch) swatch.style.backgroundColor = rgbCss;
+          if (rgbText) rgbText.textContent = `[${r}, ${g}, ${b}]`;
         }
       }
 
-      // Update Card in channels overview grid
-      const card = document.getElementById(`card-${channelId}`);
-      if (card) {
-        const swatch = card.querySelector('.channel-swatch');
-        const rgbText = card.querySelector('.channel-rgb');
-        if (swatch) swatch.style.backgroundColor = rgbCss;
-        if (rgbText) rgbText.textContent = `[${r}, ${g}, ${b}]`;
+      // Set Active Channel to Inspect
+      function setActiveChannel(channelId) {
+        state.activeId = channelId;
+        const target = CHANNELS.find((c) => c.id === channelId);
+        if (!target) return;
+
+        document.getElementById("activeTitle").textContent = target.label;
+        document.getElementById("activeDesc").textContent = target.desc;
+        const slotIndex = CHANNELS.findIndex((c) => c.id === channelId) + 1;
+        document.getElementById("activeSlotTag").textContent =
+          `Slot ${slotIndex}/10`;
+
+        // Update active highlight in grid cards
+        document
+          .querySelectorAll(".glass-card")
+          .forEach((c) => c.classList.remove("active-card"));
+        const activeCard = document.getElementById(`card-${channelId}`);
+        if (activeCard) activeCard.classList.add("active-card");
+
+        const [r, g, b] = state.colors[channelId];
+        const hsv = rgbToHsv(r, g, b);
+        renderWheel(hsv.v);
+        setColor(channelId, [r, g, b], false);
       }
-    }
 
-    // Set Active Channel to Inspect
-    function setActiveChannel(channelId) {
-      state.activeId = channelId;
-      const target = CHANNELS.find(c => c.id === channelId);
-      if (!target) return;
+      // Render the 10 channel overview cards with pure RGB indicators
+      function renderChannelCards() {
+        const container = document.getElementById("channelsGrid");
+        container.innerHTML = "";
 
-      document.getElementById('activeTitle').textContent = target.label;
-      document.getElementById('activeDesc').textContent = target.desc;
-      const slotIndex = CHANNELS.findIndex(c => c.id === channelId) + 1;
-      document.getElementById('activeSlotTag').textContent = `Slot ${slotIndex}/10`;
+        CHANNELS.forEach((channel, idx) => {
+          const [r, g, b] = state.colors[channel.id];
 
-      // Update active highlight in grid cards
-      document.querySelectorAll('.glass-card').forEach(c => c.classList.remove('active-card'));
-      const activeCard = document.getElementById(`card-${channelId}`);
-      if (activeCard) activeCard.classList.add('active-card');
+          const card = document.createElement("div");
+          card.id = `card-${channel.id}`;
+          card.className = `glass-card rounded-2xl p-3.5 border border-white/10 flex flex-col justify-between cursor-pointer group shadow-lg ${channel.id === state.activeId ? "active-card" : ""}`;
 
-      const [r, g, b] = state.colors[channelId];
-      const hsv = rgbToHsv(r, g, b);
-      renderWheel(hsv.v);
-      setColor(channelId, [r, g, b], false);
-    }
-
-    // Render the 10 channel overview cards with pure RGB indicators
-    function renderChannelCards() {
-      const container = document.getElementById('channelsGrid');
-      container.innerHTML = '';
-
-      CHANNELS.forEach((channel, idx) => {
-        const [r, g, b] = state.colors[channel.id];
-
-        const card = document.createElement('div');
-        card.id = `card-${channel.id}`;
-        card.className = `glass-card rounded-2xl p-3.5 border border-white/10 flex flex-col justify-between cursor-pointer group shadow-lg ${channel.id === state.activeId ? 'active-card' : ''}`;
-
-        card.innerHTML = `
+          card.innerHTML = `
           <div>
             <div class="flex items-center justify-between pb-2 border-b border-white/5">
               <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-cyan-400 transition-colors">#0${idx + 1}</span>
@@ -881,277 +1369,321 @@
           </div>
         `;
 
-        // Click on whole card sets active
-        card.addEventListener('click', (e) => {
-          if (e.target.closest('.btn-copy-card')) return;
-          setActiveChannel(channel.id);
+          // Click on whole card sets active
+          card.addEventListener("click", (e) => {
+            if (e.target.closest(".btn-copy-card")) return;
+            setActiveChannel(channel.id);
+          });
+
+          // Copy button on card copies pure RGB
+          const copyBtn = card.querySelector(".btn-copy-card");
+          copyBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const [cr, cg, cb] = state.colors[channel.id];
+            copyToClipboard(
+              `${cr}, ${cg}, ${cb}`,
+              `${channel.label} RGB (${cr}, ${cg}, ${cb}) copied!`,
+            );
+          });
+
+          container.appendChild(card);
         });
+      }
 
-        // Copy button on card copies pure RGB
-        const copyBtn = card.querySelector('.btn-copy-card');
-        copyBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const [cr, cg, cb] = state.colors[channel.id];
-          copyToClipboard(`${cr}, ${cg}, ${cb}`, `${channel.label} RGB (${cr}, ${cg}, ${cb}) copied!`);
-        });
+      // Wheel Pointer Interaction Handlers
+      function handleWheelEvent(e) {
+        const rect = wheelCanvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-        container.appendChild(card);
-      });
-    }
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
 
-    // Wheel Pointer Interaction Handlers
-    function handleWheelEvent(e) {
-      const rect = wheelCanvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const dx = x - wheelRadius;
+        const dy = y - wheelRadius;
+        const dist = Math.sqrt(dx * dx + dy * dy);
 
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
+        let angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        if (angle < 0) angle += 360;
 
-      const dx = x - wheelRadius;
-      const dy = y - wheelRadius;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+        const sat = Math.min(1, dist / wheelRadius);
+        const val =
+          parseFloat(document.getElementById("sliderValue").value) / 100;
 
-      let angle = Math.atan2(dy, dx) * (180 / Math.PI);
-      if (angle < 0) angle += 360;
+        const newRgb = hsvToRgb(angle, sat, val);
+        setColor(state.activeId, newRgb, false);
+      }
 
-      const sat = Math.min(1, dist / wheelRadius);
-      const val = parseFloat(document.getElementById('sliderValue').value) / 100;
-
-      const newRgb = hsvToRgb(angle, sat, val);
-      setColor(state.activeId, newRgb, false);
-    }
-
-    wheelCanvas.addEventListener('mousedown', (e) => {
-      state.isDraggingWheel = true;
-      handleWheelEvent(e);
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (state.isDraggingWheel) handleWheelEvent(e);
-    });
-
-    window.addEventListener('mouseup', () => {
-      state.isDraggingWheel = false;
-    });
-
-    // Touch support for mobile / tablets
-    wheelCanvas.addEventListener('touchstart', (e) => {
-      state.isDraggingWheel = true;
-      handleWheelEvent(e);
-      e.preventDefault();
-    }, { passive: false });
-
-    window.addEventListener('touchmove', (e) => {
-      if (state.isDraggingWheel) {
+      wheelCanvas.addEventListener("mousedown", (e) => {
+        state.isDraggingWheel = true;
         handleWheelEvent(e);
-        e.preventDefault();
-      }
-    }, { passive: false });
+      });
 
-    window.addEventListener('touchend', () => {
-      state.isDraggingWheel = false;
-    });
+      window.addEventListener("mousemove", (e) => {
+        if (state.isDraggingWheel) handleWheelEvent(e);
+      });
 
-    // Value / Brightness Slider
-    const sliderValue = document.getElementById('sliderValue');
-    sliderValue.addEventListener('input', (e) => {
-      const val = parseFloat(e.target.value) / 100;
-      document.getElementById('labelValue').textContent = `${e.target.value}%`;
-      renderWheel(val);
+      window.addEventListener("mouseup", () => {
+        state.isDraggingWheel = false;
+      });
 
-      const [r, g, b] = state.colors[state.activeId];
-      const hsv = rgbToHsv(r, g, b);
-      const newRgb = hsvToRgb(hsv.h, hsv.s, val);
-      setColor(state.activeId, newRgb, false);
-    });
+      // Touch support for mobile / tablets
+      wheelCanvas.addEventListener(
+        "touchstart",
+        (e) => {
+          state.isDraggingWheel = true;
+          handleWheelEvent(e);
+          e.preventDefault();
+        },
+        { passive: false },
+      );
 
-    // Precision RGB Channel Sliders & Inputs
-    function onRgbInputChange(source) {
-      let r = parseInt(document.getElementById('numR').value) || 0;
-      let g = parseInt(document.getElementById('numG').value) || 0;
-      let b = parseInt(document.getElementById('numB').value) || 0;
+      window.addEventListener(
+        "touchmove",
+        (e) => {
+          if (state.isDraggingWheel) {
+            handleWheelEvent(e);
+            e.preventDefault();
+          }
+        },
+        { passive: false },
+      );
 
-      if (source === 'slider') {
-        r = parseInt(document.getElementById('sliderR').value);
-        g = parseInt(document.getElementById('sliderG').value);
-        b = parseInt(document.getElementById('sliderB').value);
-      }
+      window.addEventListener("touchend", () => {
+        state.isDraggingWheel = false;
+      });
 
-      r = clamp(r);
-      g = clamp(g);
-      b = clamp(b);
+      // Value / Brightness Slider
+      const sliderValue = document.getElementById("sliderValue");
+      sliderValue.addEventListener("input", (e) => {
+        const val = parseFloat(e.target.value) / 100;
+        document.getElementById("labelValue").textContent =
+          `${e.target.value}%`;
+        renderWheel(val);
 
-      setColor(state.activeId, [r, g, b], true);
-    }
+        const [r, g, b] = state.colors[state.activeId];
+        const hsv = rgbToHsv(r, g, b);
+        const newRgb = hsvToRgb(hsv.h, hsv.s, val);
+        setColor(state.activeId, newRgb, false);
+      });
 
-    ['sliderR', 'sliderG', 'sliderB'].forEach(id => {
-      document.getElementById(id).addEventListener('input', () => onRgbInputChange('slider'));
-    });
+      // Precision RGB Channel Sliders & Inputs
+      function onRgbInputChange(source) {
+        let r = parseInt(document.getElementById("numR").value) || 0;
+        let g = parseInt(document.getElementById("numG").value) || 0;
+        let b = parseInt(document.getElementById("numB").value) || 0;
 
-    ['numR', 'numG', 'numB'].forEach(id => {
-      document.getElementById(id).addEventListener('input', () => onRgbInputChange('num'));
-    });
+        if (source === "slider") {
+          r = parseInt(document.getElementById("sliderR").value);
+          g = parseInt(document.getElementById("sliderG").value);
+          b = parseInt(document.getElementById("sliderB").value);
+        }
 
-    // Direct RGB Input Parser (accepts "r, g, b" or "rgb(r, g, b)")
-    const inputRgbDirect = document.getElementById('inputRgbDirect');
-    inputRgbDirect.addEventListener('change', (e) => {
-      const val = e.target.value.trim().replace(/^rgb\(|\)$/gi, '');
-      const parts = val.split(/[,\s]+/).map(p => parseInt(p, 10));
-      if (parts.length >= 3 && parts.slice(0, 3).every(n => !isNaN(n))) {
-        const [r, g, b] = parts.slice(0, 3).map(clamp);
+        r = clamp(r);
+        g = clamp(g);
+        b = clamp(b);
+
         setColor(state.activeId, [r, g, b], true);
       }
-    });
 
-    // Quick Swatches with RGB tooltips
-    const quickSwatchesContainer = document.getElementById('quickSwatches');
-    QUICK_PALETTE.forEach(rgb => {
-      const rgbCss = toRgbString(...rgb);
-      const btn = document.createElement('button');
-      btn.className = 'w-5 h-5 rounded-md border border-white/20 hover:scale-110 transition-transform shadow active:scale-95';
-      btn.style.backgroundColor = rgbCss;
-      btn.title = rgbCss;
-      btn.addEventListener('click', () => {
-        setColor(state.activeId, rgb, true);
+      ["sliderR", "sliderG", "sliderB"].forEach((id) => {
+        document
+          .getElementById(id)
+          .addEventListener("input", () => onRgbInputChange("slider"));
       });
-      quickSwatchesContainer.appendChild(btn);
-    });
 
-    // Channel Cycling Navigation Controls
-    document.getElementById('btnPrevChannel').addEventListener('click', () => {
-      const currentIndex = CHANNELS.findIndex(c => c.id === state.activeId);
-      const prevIndex = (currentIndex - 1 + CHANNELS.length) % CHANNELS.length;
-      setActiveChannel(CHANNELS[prevIndex].id);
-    });
+      ["numR", "numG", "numB"].forEach((id) => {
+        document
+          .getElementById(id)
+          .addEventListener("input", () => onRgbInputChange("num"));
+      });
 
-    document.getElementById('btnNextChannel').addEventListener('click', () => {
-      const currentIndex = CHANNELS.findIndex(c => c.id === state.activeId);
-      const nextIndex = (currentIndex + 1) % CHANNELS.length;
-      setActiveChannel(CHANNELS[nextIndex].id);
-    });
+      // Direct RGB Input Parser (accepts "r, g, b" or "rgb(r, g, b)")
+      const inputRgbDirect = document.getElementById("inputRgbDirect");
+      inputRgbDirect.addEventListener("change", (e) => {
+        const val = e.target.value.trim().replace(/^rgb\(|\)$/gi, "");
+        const parts = val.split(/[,\s]+/).map((p) => parseInt(p, 10));
+        if (parts.length >= 3 && parts.slice(0, 3).every((n) => !isNaN(n))) {
+          const [r, g, b] = parts.slice(0, 3).map(clamp);
+          setColor(state.activeId, [r, g, b], true);
+        }
+      });
 
-    // Reset current active channel to default
-    document.getElementById('btnResetChannel').addEventListener('click', () => {
-      const currentChannel = CHANNELS.find(c => c.id === state.activeId);
-      if (currentChannel) {
-        setColor(currentChannel.id, [...currentChannel.default], true);
-        showToast(`Reset ${currentChannel.label} to default`);
-      }
-    });
+      // Quick Swatches with RGB tooltips
+      const quickSwatchesContainer = document.getElementById("quickSwatches");
+      QUICK_PALETTE.forEach((rgb) => {
+        const rgbCss = toRgbString(...rgb);
+        const btn = document.createElement("button");
+        btn.className =
+          "w-5 h-5 rounded-md border border-white/20 hover:scale-110 transition-transform shadow active:scale-95";
+        btn.style.backgroundColor = rgbCss;
+        btn.title = rgbCss;
+        btn.addEventListener("click", () => {
+          setColor(state.activeId, rgb, true);
+        });
+        quickSwatchesContainer.appendChild(btn);
+      });
 
-    // Presets selection
-    document.getElementById('presetSelect').addEventListener('change', (e) => {
-      const presetKey = e.target.value;
-      const preset = PRESETS[presetKey];
-      if (preset) {
-        Object.keys(preset).forEach(channelId => {
-          if (state.colors[channelId]) {
-            setColor(channelId, [...preset[channelId]], false);
+      // Channel Cycling Navigation Controls
+      document
+        .getElementById("btnPrevChannel")
+        .addEventListener("click", () => {
+          const currentIndex = CHANNELS.findIndex(
+            (c) => c.id === state.activeId,
+          );
+          const prevIndex =
+            (currentIndex - 1 + CHANNELS.length) % CHANNELS.length;
+          setActiveChannel(CHANNELS[prevIndex].id);
+        });
+
+      document
+        .getElementById("btnNextChannel")
+        .addEventListener("click", () => {
+          const currentIndex = CHANNELS.findIndex(
+            (c) => c.id === state.activeId,
+          );
+          const nextIndex = (currentIndex + 1) % CHANNELS.length;
+          setActiveChannel(CHANNELS[nextIndex].id);
+        });
+
+      // Reset current active channel to default
+      document
+        .getElementById("btnResetChannel")
+        .addEventListener("click", () => {
+          const currentChannel = CHANNELS.find((c) => c.id === state.activeId);
+          if (currentChannel) {
+            setColor(currentChannel.id, [...currentChannel.default], true);
+            showToast(`Reset ${currentChannel.label} to default`);
           }
         });
+
+      // Presets selection
+      document
+        .getElementById("presetSelect")
+        .addEventListener("change", (e) => {
+          const presetKey = e.target.value;
+          const preset = PRESETS[presetKey];
+          if (preset) {
+            Object.keys(preset).forEach((channelId) => {
+              if (state.colors[channelId]) {
+                setColor(channelId, [...preset[channelId]], false);
+              }
+            });
+            setActiveChannel(state.activeId);
+            showToast(
+              `Loaded ${e.target.options[e.target.selectedIndex].text} preset`,
+            );
+          }
+        });
+
+      // Harmonious randomizer
+      document.getElementById("btnRandomAll").addEventListener("click", () => {
+        const baseHue = Math.random() * 360;
+        CHANNELS.forEach((channel, idx) => {
+          const hue = (baseHue + idx * 36) % 360;
+          const sat = 0.4 + Math.random() * 0.6;
+          const val = 0.3 + Math.random() * 0.7;
+          setColor(channel.id, hsvToRgb(hue, sat, val), false);
+        });
         setActiveChannel(state.activeId);
-        showToast(`Loaded ${e.target.options[e.target.selectedIndex].text} preset`);
-      }
-    });
-
-    // Harmonious randomizer
-    document.getElementById('btnRandomAll').addEventListener('click', () => {
-      const baseHue = Math.random() * 360;
-      CHANNELS.forEach((channel, idx) => {
-        const hue = (baseHue + idx * 36) % 360;
-        const sat = 0.4 + Math.random() * 0.6;
-        const val = 0.3 + Math.random() * 0.7;
-        setColor(channel.id, hsvToRgb(hue, sat, val), false);
+        showToast("Generated harmonious palette!");
       });
-      setActiveChannel(state.activeId);
-      showToast('Generated harmonious palette!');
-    });
 
-    // Toast notification utility
-    let toastTimeout;
-    function showToast(message) {
-      const toast = document.getElementById('toastMessage');
-      const text = document.getElementById('toastText');
-      text.textContent = message;
+      // Toast notification utility
+      let toastTimeout;
+      function showToast(message) {
+        const toast = document.getElementById("toastMessage");
+        const text = document.getElementById("toastText");
+        text.textContent = message;
 
-      toast.classList.remove('translate-y-12', 'opacity-0');
-      toast.classList.add('translate-y-0', 'opacity-100');
+        toast.classList.remove("translate-y-12", "opacity-0");
+        toast.classList.add("translate-y-0", "opacity-100");
 
-      clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-12', 'opacity-0');
-      }, 2400);
-    }
-
-    // Safe clipboard copier with execCommand fallback
-    function copyToClipboard(text, successMsg = 'Copied to clipboard!') {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand('copy');
-        showToast(successMsg);
-      } catch (err) {
-        console.error('Copy fallback failed', err);
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          toast.classList.remove("translate-y-0", "opacity-100");
+          toast.classList.add("translate-y-12", "opacity-0");
+        }, 2400);
       }
-      document.body.removeChild(textarea);
-    }
 
-    // Copy RGB for the active channel
-    document.getElementById('btnCopyCurrentRgb').addEventListener('click', () => {
-      const [r, g, b] = state.colors[state.activeId];
-      copyToClipboard(`${r}, ${g}, ${b}`, `${state.activeId} RGB (${r}, ${g}, ${b}) copied!`);
-    });
-
-    // Export Modal Management (Restricted exclusively to Flat Stream)
-    const exportModal = document.getElementById('exportModal');
-    const exportTextarea = document.getElementById('exportTextarea');
-    const exportLengthBadge = document.getElementById('exportLengthBadge');
-
-    function generateRgbExportData() {
-      // Space-delimited stream: r g b r g b ... across all 10 channels in order
-      return CHANNELS.map(c => state.colors[c.id].join(' ')).join(' ');
-    }
-
-    function updateExportDisplay() {
-      const output = generateRgbExportData();
-      if (exportTextarea) exportTextarea.value = output;
-      if (exportLengthBadge) exportLengthBadge.textContent = `${output.length} chars`;
-    }
-
-    document.getElementById('btnOpenExport').addEventListener('click', () => {
-      updateExportDisplay();
-      exportModal.classList.remove('hidden');
-      exportModal.classList.add('flex');
-    });
-
-    document.getElementById('btnCloseExport').addEventListener('click', () => {
-      exportModal.classList.add('hidden');
-      exportModal.classList.remove('flex');
-    });
-
-    exportModal.addEventListener('click', (e) => {
-      if (e.target === exportModal) {
-        exportModal.classList.add('hidden');
-        exportModal.classList.remove('flex');
+      // Safe clipboard copier with execCommand fallback
+      function copyToClipboard(text, successMsg = "Copied to clipboard!") {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand("copy");
+          showToast(successMsg);
+        } catch (err) {
+          console.error("Copy fallback failed", err);
+        }
+        document.body.removeChild(textarea);
       }
-    });
 
-    document.getElementById('btnCopyExport').addEventListener('click', () => {
-      copyToClipboard(exportTextarea.value, 'Flat RGB stream copied to clipboard!');
-    });
+      // Copy RGB for the active channel
+      document
+        .getElementById("btnCopyCurrentRgb")
+        .addEventListener("click", () => {
+          const [r, g, b] = state.colors[state.activeId];
+          copyToClipboard(
+            `${r}, ${g}, ${b}`,
+            `${state.activeId} RGB (${r}, ${g}, ${b}) copied!`,
+          );
+        });
 
-    // Initialize application on window load
-    window.addEventListener('load', () => {
-      renderWheel(1.0);
-      renderChannelCards();
-      setActiveChannel('Body');
-    });
-  </script>
-</body>
+      // Export Modal Management (Restricted exclusively to Flat Stream)
+      const exportModal = document.getElementById("exportModal");
+      const exportTextarea = document.getElementById("exportTextarea");
+      const exportLengthBadge = document.getElementById("exportLengthBadge");
+
+      function generateRgbExportData() {
+        // Space-delimited stream: r g b r g b ... across all 10 channels in order
+        return CHANNELS.map((c) => state.colors[c.id].join(" ")).join(" ");
+      }
+
+      function updateExportDisplay() {
+        const output = generateRgbExportData();
+        if (exportTextarea) exportTextarea.value = output;
+        if (exportLengthBadge)
+          exportLengthBadge.textContent = `${output.length} chars`;
+      }
+
+      document.getElementById("btnOpenExport").addEventListener("click", () => {
+        updateExportDisplay();
+        exportModal.classList.remove("hidden");
+        exportModal.classList.add("flex");
+      });
+
+      document
+        .getElementById("btnCloseExport")
+        .addEventListener("click", () => {
+          exportModal.classList.add("hidden");
+          exportModal.classList.remove("flex");
+        });
+
+      exportModal.addEventListener("click", (e) => {
+        if (e.target === exportModal) {
+          exportModal.classList.add("hidden");
+          exportModal.classList.remove("flex");
+        }
+      });
+
+      document.getElementById("btnCopyExport").addEventListener("click", () => {
+        copyToClipboard(
+          exportTextarea.value,
+          "Flat RGB stream copied to clipboard!",
+        );
+      });
+
+      // Initialize application on window load
+      window.addEventListener("load", () => {
+        renderWheel(1.0);
+        renderChannelCards();
+        setActiveChannel("Body");
+      });
+    </script>
+  </body>
 </html>
