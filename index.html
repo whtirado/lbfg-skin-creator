@@ -758,7 +758,9 @@
         >
           <p class="text-[11px] text-slate-300 font-mono">
             Format:
-            <span class="text-cyan-300">R G B R G B ... (Body → Claws)</span>
+            <span class="text-cyan-300"
+              >!import-skin R G B ... (Body → Claws)</span
+            >
           </p>
           <div class="flex items-center gap-2">
             <span
@@ -1618,8 +1620,11 @@
       const exportLengthBadge = document.getElementById("exportLengthBadge");
 
       function generateRgbExportData() {
-        // Space-delimited stream: r g b r g b ... across all 10 channels in order
-        return CHANNELS.map((c) => state.colors[c.id].join(" ")).join(" ");
+        // Command plus space-delimited stream: r g b r g b ... across all 10 channels
+        const stream = CHANNELS.map((c) => state.colors[c.id].join(" ")).join(
+          " ",
+        );
+        return `!import-skin ${stream}`;
       }
 
       function updateExportDisplay() {
