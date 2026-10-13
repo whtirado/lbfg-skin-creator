@@ -509,31 +509,31 @@
             <div
               class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center py-4 my-auto"
             >
-              <!-- Polar Color Wheel Canvas Column (MD: 5-6 Cols) -->
+              <!-- Polar Color Wheel Canvas Column -->
               <div
                 class="md:col-span-5 flex flex-col items-center justify-center gap-3 select-none"
               >
                 <div
-                  class="relative w-[210px] h-[210px] flex items-center justify-center"
+                  class="relative w-full max-w-[320px] aspect-square flex items-center justify-center"
                 >
                   <!-- Color Wheel Canvas -->
                   <canvas
                     id="wheelCanvas"
-                    width="210"
-                    height="210"
-                    class="rounded-full shadow-2xl cursor-crosshair border-2 border-white/10"
+                    width="420"
+                    height="420"
+                    class="w-full h-full rounded-full shadow-2xl cursor-crosshair border-2 border-white/10"
                   ></canvas>
 
                   <!-- Wheel Marker Pin -->
                   <div
                     id="wheelPin"
                     class="absolute w-5 h-5 -ml-2.5 -mt-2.5 rounded-full border-2 border-white pointer-events-none shadow-lg transition-transform duration-75"
-                    style="left: 105px; top: 105px; background: #3b4252"
+                    style="left: 50%; top: 50%; background: #3b4252"
                   ></div>
                 </div>
               </div>
 
-              <!-- Precision RGB Sliders Column (MD: 7 Cols) -->
+              <!-- Precision RGB Sliders Column -->
               <div class="md:col-span-7 flex flex-col gap-3">
                 <!-- Red Slider -->
                 <div
@@ -1258,8 +1258,8 @@
         const py = wheelRadius + dist * Math.sin(rad);
 
         const pin = document.getElementById("wheelPin");
-        pin.style.left = `${px}px`;
-        pin.style.top = `${py}px`;
+        pin.style.left = `${(px / wheelSize) * 100}%`;
+        pin.style.top = `${(py / wheelSize) * 100}%`;
         pin.style.backgroundColor = toRgbString(r, g, b);
       }
 
@@ -1393,8 +1393,8 @@
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
+        const x = ((clientX - rect.left) / rect.width) * wheelSize;
+        const y = ((clientY - rect.top) / rect.height) * wheelSize;
 
         const dx = x - wheelRadius;
         const dy = y - wheelRadius;
