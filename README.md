@@ -12,9 +12,9 @@ Open `index.html` in a browser. The page loads Tailwind and fonts from a CDN, so
 
 1. Pick a channel from the overview grid, or step through them with the previous and next buttons.
 2. Set the color with the hue/saturation wheel, the brightness slider, the R/G/B sliders, the number fields, or a typed `r, g, b` value.
-3. Copy the active channel as `r, g, b`, or open **Export RGB** to copy the full palette.
+3. Copy the active channel as `r g b`, or click **Paste RGB** to apply clipboard text such as `235 94 40` to the selected channel. Open **Export RGB** to copy the full palette.
 
-**Theme** loads a named preset across all ten channels. **Randomize** builds a new harmonious palette. **Default** restores the selected channel to its starting color.
+**Theme** loads a named preset across all ten channels. **Randomize** builds a new harmonious palette. **Paste RGB** reads the clipboard when clicked. The text must be three integers from 1 to 255, like `235 94 40`. Anything else shows an error and leaves the channel unchanged.
 
 ## Channels
 

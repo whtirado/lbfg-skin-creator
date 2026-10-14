@@ -428,7 +428,7 @@
               class="pt-3 border-t border-white/10 flex items-center justify-between gap-2 mt-2"
             >
               <button
-                id="btnResetChannel"
+                id="btnPasteRgb"
                 class="px-3 py-1.5 rounded-xl bg-cyber-900 border border-white/10 text-xs font-semibold text-slate-400 hover:text-white hover:bg-cyber-850 transition-colors flex items-center gap-1.5 shadow-sm"
               >
                 <svg
@@ -441,10 +441,10 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
                   />
                 </svg>
-                Default
+                Paste RGB
               </button>
               <button
                 id="btnCopyCurrentRgb"
@@ -818,12 +818,14 @@
       class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-cyber-850 border border-cyan-400/40 text-cyan-200 px-4 py-2.5 rounded-xl shadow-2xl shadow-cyan-950 text-xs font-mono transform translate-y-12 opacity-0 transition-all duration-300 pointer-events-none"
     >
       <svg
+        id="toastIcon"
         class="w-4 h-4 text-cyan-400 flex-shrink-0"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
       >
         <path
+          id="toastIconPath"
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
@@ -1534,16 +1536,60 @@
           setActiveChannel(CHANNELS[nextIndex].id);
         });
 
-      // Reset current active channel to default
-      document
-        .getElementById("btnResetChannel")
-        .addEventListener("click", () => {
-          const currentChannel = CHANNELS.find((c) => c.id === state.activeId);
-          if (currentChannel) {
-            setColor(currentChannel.id, [...currentChannel.default]);
-            showToast(`Reset ${currentChannel.label} to default`);
+      // Accept the formats this page copies and displays: "r g b", "r, g, b",
+      // "rgb(r, g, b)", or "[r, g, b]". Each channel must be an integer 1–255.
+      function parsePastedRgb(raw) {
+        if (typeof raw !== "string") return null;
+        let text = raw.trim();
+        if (!text) return null;
+
+        const wrapped = text.match(/^rgb\(\s*([\s\S]+?)\s*\)$/i);
+        if (wrapped) text = wrapped[1].trim();
+
+        const bracketed = text.match(/^\[\s*([\s\S]+?)\s*\]$/);
+        if (bracketed) text = bracketed[1].trim();
+
+        const parts = text.split(/[,\s]+/).filter((part) => part.length > 0);
+        if (parts.length !== 3) return null;
+
+        const channels = [];
+        for (const part of parts) {
+          if (!/^\d{1,3}$/.test(part)) return null;
+          const n = Number(part);
+          if (!Number.isInteger(n) || n < RGB_MIN || n > RGB_MAX) return null;
+          channels.push(n);
+        }
+        return channels;
+      }
+
+      // Apply clipboard text to the selected channel. Invalid text leaves the
+      // color unchanged.
+      function applyPastedRgbText(text) {
+        const rgb = parsePastedRgb(text);
+        if (!rgb) {
+          showToast("Invalid RGB. Use three integers from 1 to 255", true);
+          return;
+        }
+        setColor(state.activeId, rgb);
+        showToast(`Pasted RGB ${rgb[0]} ${rgb[1]} ${rgb[2]}`);
+      }
+
+      // Click reads the clipboard directly. A copied value such as "235 94 40"
+      // becomes the selected channel color.
+      document.getElementById("btnPasteRgb").addEventListener("click", async () => {
+        let text;
+        try {
+          if (!navigator.clipboard || !navigator.clipboard.readText) {
+            showToast("Could not read the clipboard", true);
+            return;
           }
-        });
+          text = await navigator.clipboard.readText();
+        } catch (err) {
+          showToast("Could not read the clipboard", true);
+          return;
+        }
+        applyPastedRgbText(text);
+      });
 
       // Presets selection
       document
@@ -1577,12 +1623,42 @@
         showToast("Generated harmonious palette!");
       });
 
-      // Toast notification utility
+      // Toast notification utility. Pass true to show an error instead of success.
       let toastTimeout;
-      function showToast(message) {
+      function showToast(message, isError = false) {
         const toast = document.getElementById("toastMessage");
         const text = document.getElementById("toastText");
+        const icon = document.getElementById("toastIcon");
+        const iconPath = document.getElementById("toastIconPath");
         text.textContent = message;
+
+        toast.classList.remove(
+          "border-cyan-400/40",
+          "text-cyan-200",
+          "shadow-cyan-950",
+          "border-rose-400/50",
+          "text-rose-200",
+          "shadow-rose-950",
+        );
+        icon.classList.remove("text-cyan-400", "text-rose-400");
+
+        if (isError) {
+          toast.classList.add(
+            "border-rose-400/50",
+            "text-rose-200",
+            "shadow-rose-950",
+          );
+          icon.classList.add("text-rose-400");
+          iconPath.setAttribute("d", "M6 18L18 6M6 6l12 12");
+        } else {
+          toast.classList.add(
+            "border-cyan-400/40",
+            "text-cyan-200",
+            "shadow-cyan-950",
+          );
+          icon.classList.add("text-cyan-400");
+          iconPath.setAttribute("d", "M5 13l4 4L19 7");
+        }
 
         toast.classList.remove("translate-y-12", "opacity-0");
         toast.classList.add("translate-y-0", "opacity-100");
